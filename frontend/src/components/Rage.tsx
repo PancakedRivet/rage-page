@@ -34,12 +34,10 @@ export default function Rage() {
         if (formRefCurrent.reportValidity()) {
             const complaintData = {
                 complaint: rageText,
+                submissionTime: new Date(),
             }
             const jsonComplaintData = JSON.stringify(complaintData)
-            console.log(jsonComplaintData)
             submitRage.mutate(jsonComplaintData)
-            setSnackbarIsOpen(true)
-            setIsLoading(true)
         }
     }
 
@@ -50,31 +48,31 @@ export default function Rage() {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    // Authorization: 'Basic ' + btoa('root:root'),
-                    Authorization: 'Basic cm9vdDpyb290',
+                    Authorization: 'Basic ' + btoa('root:root'),
                     NS: 'test',
                     DB: 'test',
                 },
                 body: postBody,
-            })
-                .then((response) => response.json())
-                .then((res) => {
-                    console.warn(res)
-                    if (!res.ok) {
-                        throw new Error('An error ocurred')
-                    }
-                    return res
-                }),
+            }).then((res) => {
+                if (!res.ok) {
+                    throw new Error('An error ocurred')
+                }
+                return res
+            }),
         {
-            onSuccess: () => {
-                setAlertSeverity('success')
-                setRageText('')
-            },
             onMutate: () => {
                 setIsLoading(true)
             },
+            onSuccess: () => {
+                setIsLoading(false)
+                setAlertSeverity('success')
+                setSnackbarIsOpen(true)
+                setRageText('')
+            },
             onError: () => {
+                setIsLoading(false)
                 setAlertSeverity('error')
+                setSnackbarIsOpen(true)
             },
         }
     )
@@ -94,11 +92,11 @@ export default function Rage() {
                     <form ref={formRef}>
                         <TextField
                             fullWidth
-                            label="I'm so annoyed by..."
+                            label={"I'm so annoyed by..."}
                             id="fullWidth"
                             multiline
                             maxRows={4}
-                            placeholder="Let it all out..."
+                            placeholder={'Let it all out...'}
                             value={rageText}
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
@@ -138,8 +136,8 @@ export default function Rage() {
 
             <Snackbar
                 open={snackbarIsOpen}
-                autoHideDuration={6000}
-                // onClose={handleClose}
+                autoHideDuration={3000}
+                onClose={handleClose}
             >
                 <Alert
                     onClose={handleClose}
