@@ -1,9 +1,13 @@
+import ReactTable from './table/ReactTable'
 import { DATABASE_URL, Complaint } from '../helpers/helpers'
 
 import { useQuery } from '@tanstack/react-query'
 
 import { createColumnHelper } from '@tanstack/react-table'
-import Table from './table/Table'
+
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
 const columnHelper = createColumnHelper<Complaint>()
 
@@ -32,13 +36,23 @@ export default function GetRage() {
     )
 
     return (
-        <div>
-            Rages Sent:
-            {data && data[0].result?.length > 0 ? (
-                <Table columns={columns} data={data[0].result} />
-            ) : (
-                <p>No Rage</p>
-            )}
-        </div>
+        <Box sx={{ width: '100%' }}>
+            <Stack spacing={2}>
+                <Typography variant="h2" gutterBottom>
+                    Rages Sent:
+                </Typography>
+                {data && data[0].result?.length > 0 ? (
+                    <ReactTable
+                        columns={columns}
+                        data={data[0].result}
+                        // showTableState
+                    />
+                ) : (
+                    <Typography variant="h4" gutterBottom>
+                        No Rages Sent!
+                    </Typography>
+                )}
+            </Stack>
+        </Box>
     )
 }
