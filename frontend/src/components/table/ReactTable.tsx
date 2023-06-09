@@ -52,7 +52,7 @@ export default function ReactTable({
     return (
         <Box sx={{ width: '100%' }}>
             <TableContainer component={Paper}>
-                <Table aria-label="simple table">
+                <Table stickyHeader aria-label="simple table">
                     <TableHead>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
