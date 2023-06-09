@@ -20,19 +20,19 @@ install:
 
 
 dev:
- $(DOCKER_EXEC_TOOLS_APP) -c $(SERVER_RUN)
+	$(DOCKER_EXEC_TOOLS_APP) -c $(SERVER_RUN)
 
 
 up:
 	$(DOCKER_COMPOSE) up -d
 
 
-start: up dev
-// this will up the docker env and run the npm run dev it to
+start: up dev	
+	// this will up the docker env and run the npm run dev it to
 
 
 first: build install dev
-// this will build the env, up it and run the npm install and then run npm run dev it to
+	// this will build the env, up it and run the npm install and then run npm run dev it to
 
 
 stop: $(ROOT_DIR)/docker-compose.yml
