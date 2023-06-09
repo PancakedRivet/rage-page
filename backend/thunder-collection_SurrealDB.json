@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-09T14:14:29.756Z",
+    "dateExported": "2023-06-09T22:12:18.276Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -14,7 +14,41 @@
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-06-09T13:57:45.399Z",
-            "modified": "2023-06-09T13:59:06.340Z",
+            "modified": "2023-06-09T21:38:15.127Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "6b0f2c30-81af-4a78-a79c-38e8d9fdbb1c",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Get Version",
+            "url": "http://127.0.0.1:9000/version",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2023-06-09T21:07:02.111Z",
+            "modified": "2023-06-09T21:28:08.852Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -82,7 +116,7 @@
             "_id": "57bbf519-b761-4b92-b479-a3d096d082e4",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
             "containerId": "",
-            "name": "Delete All Records From Table",
+            "name": "Delete All Complaints",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "DELETE",
             "sortNum": 30000,
@@ -116,7 +150,7 @@
             "_id": "f503b9b1-7ca4-4272-9c68-9e9350583b23",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
             "containerId": "",
-            "name": "Delete All Records From Table Copy",
+            "name": "Delete One Complaint",
             "url": "http://127.0.0.1:9000/key/complaints/{id}",
             "method": "DELETE",
             "sortNum": 40000,
