@@ -1,6 +1,8 @@
 import React from 'react'
 
-import Alert from '@mui/material/Alert'
+import { DATABASE_URL } from '../helpers/helpers'
+
+import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -11,15 +13,56 @@ import Typography from '@mui/material/Typography'
 
 import SendIcon from '@mui/icons-material/Send'
 
+import { useMutation } from 'react-query'
+
 export default function Rage() {
-    const [open, setOpen] = React.useState(false)
+    const formRef = React.useRef<HTMLFormElement>(null)
+
+    const [snackbarIsOpen, setSnackbarIsOpen] = React.useState(false)
+    const [rageText, setRageText] = React.useState('')
+    const [alertSeverity, setAlertSeverity] =
+        React.useState<AlertColor>('success')
+    const [isLoading, setIsLoading] = React.useState(false)
 
     const handleClose = () => {
-        setOpen(false)
+        setSnackbarIsOpen(false)
+        setIsLoading(false)
     }
-    const handleOpen = () => {
-        setOpen(true)
+
+    function handleSubmit() {
+        const formRefCurrent = formRef.current as HTMLFormElement
+        if (formRefCurrent.reportValidity()) {
+            submitRage.mutate()
+            setSnackbarIsOpen(true)
+            setIsLoading(true)
+        }
     }
+
+    const submitRage = useMutation(
+        (rageText) =>
+            fetch(DATABASE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(rageText),
+            }).then((res) => {
+                if (!res.ok) {
+                    throw new Error('An error ocurred')
+                }
+                return res
+            }),
+        {
+            onSuccess: () => {
+                setAlertSeverity('success')
+                setRageText('')
+            },
+            onMutate: () => {
+                setIsLoading(true)
+            },
+            onError: () => {
+                setAlertSeverity('error')
+            },
+        }
+    )
 
     return (
         <>
@@ -33,31 +76,39 @@ export default function Rage() {
                     <Typography variant="h2" gutterBottom>
                         What is making you rage today?
                     </Typography>
+                    <form ref={formRef}>
+                        <TextField
+                            fullWidth
+                            label="I'm so annoyed by..."
+                            id="fullWidth"
+                            multiline
+                            maxRows={4}
+                            placeholder="Let it all out..."
+                            value={rageText}
+                            onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setRageText(event.target.value)
+                            }}
+                            required
+                        />
+                    </form>
 
-                    <TextField
-                        fullWidth
-                        label="I'm so annoyed by..."
-                        id="fullWidth"
-                        multiline
-                        maxRows={4}
-                        placeholder="Let it all out..."
-                    />
-
-                    {open ? (
+                    {isLoading ? (
                         <Button
                             variant="contained"
-                            onClick={handleClose}
                             size="large"
                             sx={{
                                 height: 50,
                             }}
+                            disabled
                         >
                             <CircularProgress color="inherit" />
                         </Button>
                     ) : (
                         <Button
                             variant="contained"
-                            onClick={handleOpen}
+                            onClick={handleSubmit}
                             endIcon={<SendIcon />}
                             size="large"
                             sx={{
@@ -70,14 +121,20 @@ export default function Rage() {
                 </Stack>
             </Box>
 
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar
+                open={snackbarIsOpen}
+                autoHideDuration={6000}
+                // onClose={handleClose}
+            >
                 <Alert
                     onClose={handleClose}
-                    severity="success"
+                    severity={alertSeverity}
                     sx={{ width: '100%' }}
                     variant="filled"
                 >
-                    Thank you for your rage
+                    {alertSeverity === 'success'
+                        ? 'Thank you for your rage'
+                        : 'Oh no, something went wrong!'}
                 </Alert>
             </Snackbar>
         </>
