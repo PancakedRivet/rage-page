@@ -1,30 +1,30 @@
-version: "3.4"
+version: '3.4'
 services:
- vite_docker:
-  image: node:alpine
-  container_name: vite_docker
-  entrypoint: /bin/sh
-  ports:
-    - 8000:8000
-  working_dir: /srv/app
-  volumes:
-    - type: bind
-      source: ./frontend
-      target: /srv/app
-  tty: true
- surrealdb:
-  image: surrealdb/surrealdb:latest
-  container_name: surrealdb
-  ports:
-    - "9000:8000"
-  command: 
-    - start
-    - --log=info
-    - --user=root
-    - --pass=root
-    - file:/data/mydatabase.db
-  volumes:
-    - type: bind
-      source: ./backend
-      target: /data
-  restart: always
+    vite_docker:
+        image: node:alpine
+        container_name: vite_docker
+        entrypoint: /bin/sh
+        ports:
+            - 8000:8000
+        working_dir: /srv/app
+        volumes:
+            - type: bind
+              source: ./frontend
+              target: /srv/app
+        tty: true
+    surrealdb:
+        image: surrealdb/surrealdb:latest
+        container_name: surrealdb
+        ports:
+            - '9000:8000'
+        command:
+            - start
+            - --log=info
+            - --user=root
+            - --pass=root
+            - file:/data/mydatabase.db
+        volumes:
+            - type: bind
+              source: ./backend
+              target: /data
+        restart: always
