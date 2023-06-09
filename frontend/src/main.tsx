@@ -2,10 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import Rage from './components/Rage.tsx'
+import GetRage from './components/GetRage.tsx'
 import MateriaThemeProvider from './components/MateriaThemeContext.tsx'
 import './index.css'
 
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     {
         path: '/app',
         element: <App />,
+    },
+    {
+        path: '/get',
+        element: <GetRage />,
     },
     {
         path: '/admin',

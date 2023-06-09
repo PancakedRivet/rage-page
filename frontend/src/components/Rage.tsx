@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 
 import SendIcon from '@mui/icons-material/Send'
 
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export default function Rage() {
     const formRef = React.useRef<HTMLFormElement>(null)
@@ -32,24 +32,39 @@ export default function Rage() {
     function handleSubmit() {
         const formRefCurrent = formRef.current as HTMLFormElement
         if (formRefCurrent.reportValidity()) {
-            submitRage.mutate()
+            const complaintData = {
+                complaint: rageText,
+            }
+            const jsonComplaintData = JSON.stringify(complaintData)
+            console.log(jsonComplaintData)
+            submitRage.mutate(jsonComplaintData)
             setSnackbarIsOpen(true)
             setIsLoading(true)
         }
     }
 
     const submitRage = useMutation(
-        (rageText) =>
-            fetch(DATABASE_URL, {
+        (postBody: string) =>
+            fetch(DATABASE_URL + 'key/complaints', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(rageText),
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    // Authorization: 'Basic ' + btoa('root:root'),
+                    Authorization: 'Basic cm9vdDpyb290',
+                    NS: 'test',
+                    DB: 'test',
+                },
+                body: postBody,
+            })
+                .then((response) => response.json())
+                .then((res) => {
+                    console.warn(res)
+                    if (!res.ok) {
+                        throw new Error('An error ocurred')
+                    }
+                    return res
+                }),
         {
             onSuccess: () => {
                 setAlertSeverity('success')

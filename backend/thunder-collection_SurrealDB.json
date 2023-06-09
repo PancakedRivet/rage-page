@@ -1,0 +1,162 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "SurrealDB",
+    "dateExported": "2023-06-09T14:14:29.756Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "15ca54c5-29b5-4e3e-b8b5-67728d0d4328",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Get Complaints",
+            "url": "http://127.0.0.1:9000/key/complaints",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-06-09T13:57:45.399Z",
+            "modified": "2023-06-09T13:59:06.340Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "8a84fef4-459d-4f8d-9c85-113b828c35de",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Create Complaint",
+            "url": "http://127.0.0.1:9000/key/complaints",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-06-09T13:59:21.950Z",
+            "modified": "2023-06-09T13:59:49.072Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"complaint\": \"Something bad\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "57bbf519-b761-4b92-b479-a3d096d082e4",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Delete All Records From Table",
+            "url": "http://127.0.0.1:9000/key/complaints",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2023-06-09T14:11:43.826Z",
+            "modified": "2023-06-09T14:12:23.195Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "f503b9b1-7ca4-4272-9c68-9e9350583b23",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Delete All Records From Table Copy",
+            "url": "http://127.0.0.1:9000/key/complaints/{id}",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-06-09T14:12:36.489Z",
+            "modified": "2023-06-09T14:13:44.104Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "complaints:rdokhz8v3kb1954z8778",
+                    "isPath": true
+                },
+                {
+                    "name": "id",
+                    "value": "",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        }
+    ]
+}
