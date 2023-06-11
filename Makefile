@@ -32,7 +32,8 @@ start: up dev
 
 
 first: build install dev
-	// this will build the env, up it and run the npm install and then run npm run dev it to
+	// this will build the env, up it and run the npm install
+	// then run npm run dev it to start the server
 
 
 stop: $(ROOT_DIR)/docker-compose.yml
