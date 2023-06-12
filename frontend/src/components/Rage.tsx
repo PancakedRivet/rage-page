@@ -35,6 +35,7 @@ export default function Rage() {
             const complaintData = {
                 complaint: rageText,
                 submissionTime: new Date(),
+                tags: [],
             }
             const jsonComplaintData = JSON.stringify(complaintData)
             submitRage.mutate(jsonComplaintData)

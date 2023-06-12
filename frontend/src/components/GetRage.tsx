@@ -26,7 +26,7 @@ export default function GetRage() {
                 // Adjust shape from result to map
                 const map = new Map(
                     res[0].result.map((obj: Tag) => {
-                        return [obj.id, obj.tag]
+                        return [obj.id, obj.name]
                     })
                 )
                 return map

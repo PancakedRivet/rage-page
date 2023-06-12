@@ -9,5 +9,5 @@ export type Complaint = {
 
 export type Tag = {
     id: string
-    tag: string
+    name: string
 }

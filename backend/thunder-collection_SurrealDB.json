@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-12T08:58:54.500Z",
+    "dateExported": "2023-06-12T11:51:39.829Z",
     "version": "1.1",
     "folders": [
         {
@@ -170,7 +170,7 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-12T08:09:42.135Z",
-            "modified": "2023-06-12T08:35:58.826Z",
+            "modified": "2023-06-12T10:38:44.442Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -194,7 +194,7 @@
             ],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"tag\": \"Test Tag\"\n}",
+                "raw": "{\n  \"name\": \"Test Tag 2\"\n}",
                 "form": []
             },
             "auth": {
@@ -215,7 +215,7 @@
             "method": "POST",
             "sortNum": 25000,
             "created": "2023-06-12T08:25:57.823Z",
-            "modified": "2023-06-12T08:58:25.010Z",
+            "modified": "2023-06-12T11:05:29.826Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -233,7 +233,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:14msshpm6zci5v5evyfm SET tags = [tags:38tuqvb5uubadufk2mi5];\n\n// Query for the tags used by each complaint\nSELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\nSELECT tags.tag FROM complaints;",
+                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n#SELECT * FROM complaints WHERE tags.tag = \"Test Tag\"\n\n// Query for complaints with a specific tag\nSELECT *, tags[WHERE name = \"Test Tag\"], tags FROM complaints WHERE count(tags > 0);\n\nSELECT *, tags[WHERE name = \"Test Tag\"], tags FROM complaints WHERE count(tags > 0);\n",
                 "form": []
             },
             "auth": {
@@ -299,7 +299,7 @@
             "method": "PUT",
             "sortNum": 30000,
             "created": "2023-06-12T08:09:42.137Z",
-            "modified": "2023-06-12T08:15:06.036Z",
+            "modified": "2023-06-12T10:36:58.854Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -323,7 +323,7 @@
             ],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"tag\": \"TestTag2\"\n}",
+                "raw": "{\n  \"name\": \"Test Tag 2\"\n}",
                 "form": []
             },
             "auth": {
@@ -418,6 +418,45 @@
                     "isPath": false
                 }
             ],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "afbf1516-6790-4cee-9f59-46d9dc5168cc",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "",
+            "name": "Surreal Query Copy",
+            "url": "http://127.0.0.1:9000/sql",
+            "method": "POST",
+            "sortNum": 35000,
+            "created": "2023-06-12T10:45:58.772Z",
+            "modified": "2023-06-12T11:36:52.409Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "LET $id = (SELECT * FROM tags WHERE name = \"Test Tag\");\nSELECT * FROM $id;\nSELECT name FROM $id;\n\n#SELECT * FROM complaints WHERE tags CONTAINS ($id.id);\n\nSELECT * FROM complaints, tags:qn1dfvgwd8lcs679m0ai;\n\n#SELECT *, $id FROM complaints WHERE tags CONTAINS \"tags:qn1dfvgwd8lcs679m0ai\";\n",
+                "form": []
+            },
             "auth": {
                 "type": "basic",
                 "basic": {
