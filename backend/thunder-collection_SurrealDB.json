@@ -1,20 +1,69 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-09T22:12:18.276Z",
+    "dateExported": "2023-06-12T08:58:54.500Z",
     "version": "1.1",
-    "folders": [],
+    "folders": [
+        {
+            "_id": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
+            "name": "Complaints",
+            "containerId": "",
+            "created": "2023-06-12T08:09:28.085Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Tags",
+            "containerId": "",
+            "created": "2023-06-12T08:09:42.134Z",
+            "sortNum": 12500
+        }
+    ],
     "requests": [
         {
             "_id": "15ca54c5-29b5-4e3e-b8b5-67728d0d4328",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
-            "containerId": "",
+            "containerId": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
             "name": "Get Complaints",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-06-09T13:57:45.399Z",
-            "modified": "2023-06-09T21:38:15.127Z",
+            "modified": "2023-06-12T08:09:31.194Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "970436a8-764a-4adb-b4db-997593749f27",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Get Tags",
+            "url": "http://127.0.0.1:9000/key/tags",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-06-12T08:09:42.134Z",
+            "modified": "2023-06-12T08:10:33.009Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -76,13 +125,13 @@
         {
             "_id": "8a84fef4-459d-4f8d-9c85-113b828c35de",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
-            "containerId": "",
+            "containerId": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
             "name": "Create Complaint",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-09T13:59:21.950Z",
-            "modified": "2023-06-09T13:59:49.072Z",
+            "modified": "2023-06-12T08:09:32.685Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -100,7 +149,7 @@
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"complaint\": \"Something bad\"\n}",
+                "raw": "{\n  \"complaint\": \"Something bad again\",\n  \"submissionTime\": \"2023-06-09T12:00:00.000Z\",\n  \"tag\": [\"CloudOps\"]\n}",
                 "form": []
             },
             "auth": {
@@ -113,15 +162,281 @@
             "tests": []
         },
         {
-            "_id": "57bbf519-b761-4b92-b479-a3d096d082e4",
+            "_id": "024acee1-10ce-42bb-ab1f-734e5d24c682",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Create Tag",
+            "url": "http://127.0.0.1:9000/key/tags/{id}",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-06-12T08:09:42.135Z",
+            "modified": "2023-06-12T08:35:58.826Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "",
+                    "isPath": true
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"tag\": \"Test Tag\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "7032bb5c-401a-4b8b-8ba5-4054b1393894",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
             "containerId": "",
+            "name": "Surreal Query",
+            "url": "http://127.0.0.1:9000/sql",
+            "method": "POST",
+            "sortNum": 25000,
+            "created": "2023-06-12T08:25:57.823Z",
+            "modified": "2023-06-12T08:58:25.010Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:14msshpm6zci5v5evyfm SET tags = [tags:38tuqvb5uubadufk2mi5];\n\n// Query for the tags used by each complaint\nSELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\nSELECT tags.tag FROM complaints;",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "7ba059c2-8cbb-4896-a797-f278d196a9ba",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
+            "name": "Update Complaint",
+            "url": "http://127.0.0.1:9000/key/complaints/{id}",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2023-06-12T07:52:30.788Z",
+            "modified": "2023-06-12T08:09:33.893Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "complaints:n03ldj4p524ud8xfhek8",
+                    "isPath": true
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"complaint\": \"Something bad again\",\n  \"submissionTime\": \"2023-06-09T12:00:00.000Z\",\n  \"tag\": [\"CloudOps\", \"Performance\"]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "42d43178-ed57-4b20-a7f0-d70a8103f592",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Update Tag",
+            "url": "http://127.0.0.1:9000/key/tags/{id}",
+            "method": "PUT",
+            "sortNum": 30000,
+            "created": "2023-06-12T08:09:42.137Z",
+            "modified": "2023-06-12T08:15:06.036Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "testtag",
+                    "isPath": true
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"tag\": \"TestTag2\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "f503b9b1-7ca4-4272-9c68-9e9350583b23",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
+            "name": "Delete One Complaint",
+            "url": "http://127.0.0.1:9000/key/complaints/{id}",
+            "method": "DELETE",
+            "sortNum": 35000,
+            "created": "2023-06-09T14:12:36.489Z",
+            "modified": "2023-06-12T08:52:02.928Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "testcomplaint",
+                    "isPath": true
+                },
+                {
+                    "name": "id",
+                    "value": "",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "73560d38-d114-4704-8cb2-85cb460d094f",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Delete One Tag",
+            "url": "http://127.0.0.1:9000/key/tags/{id}",
+            "method": "DELETE",
+            "sortNum": 35000,
+            "created": "2023-06-12T08:09:42.138Z",
+            "modified": "2023-06-12T08:51:56.014Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "pljp4w8hqifnr6v9ifpp",
+                    "isPath": true
+                },
+                {
+                    "name": "id",
+                    "value": "",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "57bbf519-b761-4b92-b479-a3d096d082e4",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "ab80cdd5-4121-4e4a-9b9c-9bc5f2fd083a",
             "name": "Delete All Complaints",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "DELETE",
-            "sortNum": 30000,
+            "sortNum": 40000,
             "created": "2023-06-09T14:11:43.826Z",
-            "modified": "2023-06-09T14:12:23.195Z",
+            "modified": "2023-06-12T08:09:35.480Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -147,15 +462,15 @@
             "tests": []
         },
         {
-            "_id": "f503b9b1-7ca4-4272-9c68-9e9350583b23",
+            "_id": "8c82a47d-f143-4760-80d8-42a485247084",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
-            "containerId": "",
-            "name": "Delete One Complaint",
-            "url": "http://127.0.0.1:9000/key/complaints/{id}",
+            "containerId": "3652a1e8-f218-4d30-9ad6-0d85b186e3af",
+            "name": "Delete All Tags",
+            "url": "http://127.0.0.1:9000/key/tags",
             "method": "DELETE",
             "sortNum": 40000,
-            "created": "2023-06-09T14:12:36.489Z",
-            "modified": "2023-06-09T14:13:44.104Z",
+            "created": "2023-06-12T08:09:42.139Z",
+            "modified": "2023-06-12T08:16:22.710Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -170,19 +485,7 @@
                     "value": "test"
                 }
             ],
-            "params": [
-                {
-                    "name": "id",
-                    "value": "complaints:rdokhz8v3kb1954z8778",
-                    "isPath": true
-                },
-                {
-                    "name": "id",
-                    "value": "",
-                    "isDisabled": true,
-                    "isPath": false
-                }
-            ],
+            "params": [],
             "auth": {
                 "type": "basic",
                 "basic": {
