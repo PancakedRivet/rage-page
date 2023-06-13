@@ -9,7 +9,7 @@ export type Complaint = {
 
 type NonDataTableRow = {
     select?: string
-    edit: string
+    edit?: string
 }
 
 export type ComplaintTableRow = Complaint & NonDataTableRow
