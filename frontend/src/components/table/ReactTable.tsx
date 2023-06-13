@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Complaint } from '../../helpers/helpers'
+import React, { HTMLProps } from 'react'
+import { ComplaintTableRow } from '../../helpers/helpers'
 import TablePaginationActions from './TablePaginationActions'
 import './table.css'
 
@@ -35,7 +36,7 @@ export default function ReactTable({
     data,
     columns,
     showTableState = false,
-}: Props<Complaint>) {
+}: Props<ComplaintTableRow>) {
     const table = useReactTable({
         data,
         columns,
@@ -188,6 +189,30 @@ function Filter({
             placeholder={`Search...`}
             className="w-36 border shadow rounded"
             inputProps={{ 'aria-label': 'search' }}
+        />
+    )
+}
+
+export function IndeterminateCheckbox({
+    indeterminate,
+    className = '',
+    ...rest
+}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const ref = React.useRef<HTMLInputElement>(null!)
+
+    React.useEffect(() => {
+        if (typeof indeterminate === 'boolean') {
+            ref.current.indeterminate = !rest.checked && indeterminate
+        }
+    }, [ref, indeterminate, rest.checked])
+
+    return (
+        <input
+            type="checkbox"
+            ref={ref}
+            className={className + ' cursor-pointer'}
+            {...rest}
         />
     )
 }

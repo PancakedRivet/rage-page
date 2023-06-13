@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-13T10:25:13.141Z",
+    "dateExported": "2023-06-13T12:31:01.691Z",
     "version": "1.1",
     "folders": [
         {
@@ -216,7 +216,7 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-12T08:09:42.135Z",
-            "modified": "2023-06-12T10:38:44.442Z",
+            "modified": "2023-06-13T10:32:28.929Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -240,7 +240,7 @@
             ],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"name\": \"Test Tag 2\"\n}",
+                "raw": "{\n  \"name\": \"Test Tag 5\"\n}",
                 "form": []
             },
             "auth": {
@@ -261,7 +261,7 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-13T09:47:11.296Z",
-            "modified": "2023-06-13T10:23:27.149Z",
+            "modified": "2023-06-13T11:04:09.898Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -300,7 +300,7 @@
             "method": "POST",
             "sortNum": 25000,
             "created": "2023-06-12T08:25:57.823Z",
-            "modified": "2023-06-13T09:58:21.944Z",
+            "modified": "2023-06-13T10:44:21.077Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -318,7 +318,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\nSELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n",
+                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\n#SELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n\nSELECT * FROM tags;\nSELECT id, name FROM tags WHERE name INSIDE \"Test\";\nSELECT id, name FROM tags WHERE tags CONTAINSANY \"Test\";",
                 "form": []
             },
             "auth": {

@@ -1,16 +1,38 @@
 import ReactTable from './table/ReactTable'
-import { DATABASE_URL, Complaint, Tag } from '../helpers/helpers'
+import { DATABASE_URL, Tag, ComplaintTableRow } from '../helpers/helpers'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { createColumnHelper } from '@tanstack/react-table'
+import { Row, createColumnHelper } from '@tanstack/react-table'
 
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import NivoLine from './graph/NivoLine'
+import { useState } from 'react'
+import TagEditDialog from './TagEditDialog'
 
 export default function GetRage() {
+    const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
+    const [tableRowToEdit, setTableRowToEdit] = useState<
+        Row<ComplaintTableRow> | undefined
+    >(undefined)
+
+    const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
+        setTagEditIsOpen(true)
+        setTableRowToEdit(row)
+    }
+
+    const handleUpdateTag = () => {
+        console.log(tableRowToEdit)
+    }
+
+    const handleCloseTagEdit = () => {
+        setTagEditIsOpen(false)
+        setTableRowToEdit(undefined)
+    }
+
     const { data: tagData } = useQuery(['tags'], () =>
         fetch(DATABASE_URL + 'key/tags', {
             method: 'GET',
@@ -23,13 +45,11 @@ export default function GetRage() {
         })
             .then((res) => res.json())
             .then((res) => {
-                // Adjust shape from result to map
-                const map = new Map(
-                    res[0].result.map((obj: Tag) => {
-                        return [obj.id, obj.name]
-                    })
+                // Sorting the tags based on the name
+                const sortedTags = res[0].result.sort((tag1: Tag, tag2: Tag) =>
+                    tag1.name > tag2.name ? 1 : tag1.name < tag2.name ? -1 : 0
                 )
-                return map
+                return sortedTags
             })
     )
 
@@ -48,8 +68,31 @@ export default function GetRage() {
         enabled: !!tagData,
     })
 
-    const columnHelper = createColumnHelper<Complaint>()
+    const columnHelper = createColumnHelper<ComplaintTableRow>()
     const columns = [
+        // columnHelper.accessor('select', {
+        //     header: ({ table }) => (
+        //         <IndeterminateCheckbox
+        //             {...{
+        //                 checked: table.getIsAllRowsSelected(),
+        //                 indeterminate: table.getIsSomeRowsSelected(),
+        //                 onChange: table.getToggleAllRowsSelectedHandler(),
+        //             }}
+        //         />
+        //     ),
+        //     cell: ({ row }) => (
+        //         <div className="px-1">
+        //             <IndeterminateCheckbox
+        //                 {...{
+        //                     checked: row.getIsSelected(),
+        //                     disabled: !row.getCanSelect(),
+        //                     indeterminate: row.getIsSomeSelected(),
+        //                     onChange: row.getToggleSelectedHandler(),
+        //                 }}
+        //             />
+        //         </div>
+        //     ),
+        // }),
         columnHelper.accessor('id', {
             header: 'Id',
             cell: (info) => info.getValue(),
@@ -68,11 +111,28 @@ export default function GetRage() {
                 const cellValue = info.getValue()
                 if (Array.isArray(cellValue)) {
                     // If the data is an array, try get the names of the tags associated
-                    const tagList = cellValue.map((val) => tagData?.get(val))
+                    // Adjust shape from result to map
+                    const tagMap: Map<string, string> = new Map(
+                        tagData.map((obj: Tag) => {
+                            return [obj.id, obj.name]
+                        })
+                    )
+                    const tagList = cellValue.map((val) => tagMap?.get(val))
                     return tagList.join(', ')
                 }
                 return info.getValue()
             },
+        }),
+        columnHelper.accessor('edit', {
+            header: 'Edit Tags',
+            cell: ({ row }) => (
+                <Button
+                    variant="outlined"
+                    onClick={() => handleClickOpenTagEdit(row)}
+                >
+                    Edit Tags
+                </Button>
+            ),
         }),
     ]
 
@@ -97,6 +157,13 @@ export default function GetRage() {
                     </Typography>
                 )}
             </Stack>
+            <TagEditDialog
+                tableRowToEdit={tableRowToEdit}
+                tagList={tagData}
+                open={tagEditIsOpen}
+                onUpdate={handleUpdateTag}
+                onClose={handleCloseTagEdit}
+            />
         </Box>
     )
 }

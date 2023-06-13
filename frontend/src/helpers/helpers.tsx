@@ -7,6 +7,13 @@ export type Complaint = {
     tags: string[]
 }
 
+type NonDataTableRow = {
+    select?: string
+    edit: string
+}
+
+export type ComplaintTableRow = Complaint & NonDataTableRow
+
 export type Tag = {
     id: string
     name: string
