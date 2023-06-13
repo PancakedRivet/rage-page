@@ -11,6 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -116,29 +117,6 @@ export default function GetRage() {
 
     const columnHelper = createColumnHelper<ComplaintTableRow>()
     const columns = [
-        // columnHelper.accessor('select', {
-        //     header: ({ table }) => (
-        //         <IndeterminateCheckbox
-        //             {...{
-        //                 checked: table.getIsAllRowsSelected(),
-        //                 indeterminate: table.getIsSomeRowsSelected(),
-        //                 onChange: table.getToggleAllRowsSelectedHandler(),
-        //             }}
-        //         />
-        //     ),
-        //     cell: ({ row }) => (
-        //         <div className="px-1">
-        //             <IndeterminateCheckbox
-        //                 {...{
-        //                     checked: row.getIsSelected(),
-        //                     disabled: !row.getCanSelect(),
-        //                     indeterminate: row.getIsSomeSelected(),
-        //                     onChange: row.getToggleSelectedHandler(),
-        //                 }}
-        //             />
-        //         </div>
-        //     ),
-        // }),
         columnHelper.accessor('id', {
             header: 'Id',
             cell: (info) => info.getValue(),
@@ -164,7 +142,13 @@ export default function GetRage() {
                         })
                     )
                     const tagList = cellValue.map((val) => tagMap?.get(val))
-                    return tagList.join(', ')
+                    return (
+                        <Stack direction="row" spacing={1}>
+                            {tagList.map((tag, idx) => {
+                                return <Chip key={idx} label={tag} />
+                            })}
+                        </Stack>
+                    )
                 }
                 return info.getValue()
             },
