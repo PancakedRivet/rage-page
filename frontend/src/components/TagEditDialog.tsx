@@ -91,7 +91,7 @@ export default function TagEditDialog(props: SimpleDialogProps) {
     }, [open, tagList, tableRowToEdit.original.tags])
 
     return (
-        <Dialog onClose={handleClose} open={open}>
+        <Dialog onClose={handleClose} open={open} fullWidth scroll="paper">
             <DialogTitle>Tag The Rage</DialogTitle>
             <DialogContent>
                 <DialogContentText>

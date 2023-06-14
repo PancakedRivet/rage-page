@@ -181,7 +181,12 @@ export default function GetRage() {
                     )
                     const tagList = cellValue.map((val) => tagMap?.get(val))
                     return (
-                        <Stack direction="row" spacing={1}>
+                        <Stack
+                            spacing={{ xs: 1, sm: 2 }}
+                            direction="row"
+                            useFlexGap
+                            flexWrap="wrap"
+                        >
                             {tagList.map((tag, idx) => {
                                 return <Chip key={idx} label={tag} />
                             })}
