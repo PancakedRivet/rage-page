@@ -45,7 +45,7 @@ export default function ReactTable({
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         //
-        debugTable: true,
+        debugTable: showTableState,
     })
 
     const { pageSize, pageIndex } = table.getState().pagination

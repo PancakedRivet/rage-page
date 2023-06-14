@@ -32,6 +32,13 @@ export default function GetRage() {
         setTableRowToEdit(row)
     }
 
+    const handleCreateTag = (newTagName: string) => {
+        const jsonTag = JSON.stringify({
+            name: newTagName,
+        })
+        createTag.mutate(jsonTag)
+    }
+
     const handleUpdateTagEdit = (selectedTags: Tag[]) => {
         const complaintId = tableRowToEdit?.original.id
         const newTagIds = selectedTags.map((tag) => tag.id)
@@ -115,6 +122,37 @@ export default function GetRage() {
         }
     )
 
+    const createTag = useMutation(
+        (postBody: string) =>
+            fetch(DATABASE_URL + 'key/tags', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    Authorization: 'Basic ' + btoa('root:root'),
+                    NS: 'test',
+                    DB: 'test',
+                },
+                body: postBody,
+            }).then((res) => {
+                if (!res.ok) {
+                    throw new Error('An error ocurred')
+                }
+                return res
+            }),
+        {
+            onSuccess: () => {
+                setAlertSeverity('success')
+                setSnackbarIsOpen(true)
+                queryClient.invalidateQueries({ queryKey: ['tags'] })
+            },
+            onError: () => {
+                setAlertSeverity('error')
+                setSnackbarIsOpen(true)
+            },
+        }
+    )
+
     const columnHelper = createColumnHelper<ComplaintTableRow>()
     const columns = [
         columnHelper.accessor('id', {
@@ -130,7 +168,7 @@ export default function GetRage() {
             cell: (info) => info.getValue(),
         }),
         columnHelper.accessor('tags', {
-            header: 'Tag',
+            header: 'Tags',
             cell: (info) => {
                 const cellValue = info.getValue()
                 if (Array.isArray(cellValue)) {
@@ -188,13 +226,16 @@ export default function GetRage() {
                         </Typography>
                     )}
                 </Stack>
-                <TagEditDialog
-                    tableRowToEdit={tableRowToEdit}
-                    tagList={tagData}
-                    open={tagEditIsOpen}
-                    onUpdate={handleUpdateTagEdit}
-                    onClose={handleCloseTagEdit}
-                />
+                {tableRowToEdit && tagData && (
+                    <TagEditDialog
+                        tableRowToEdit={tableRowToEdit}
+                        tagList={tagData}
+                        open={tagEditIsOpen}
+                        onCreate={handleCreateTag}
+                        onUpdate={handleUpdateTagEdit}
+                        onClose={handleCloseTagEdit}
+                    />
+                )}
             </Box>
             <Snackbar
                 open={snackbarIsOpen}
