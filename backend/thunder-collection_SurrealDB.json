@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-13T12:31:01.691Z",
+    "dateExported": "2023-06-14T01:25:55.679Z",
     "version": "1.1",
     "folders": [
         {
@@ -99,12 +99,12 @@
             "_id": "afbf1516-6790-4cee-9f59-46d9dc5168cc",
             "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
             "containerId": "ff4205c1-c09d-4a90-862c-bb1cd0c7d4e7",
-            "name": "Update Complaint Tags",
+            "name": "Update Complaint",
             "url": "http://127.0.0.1:9000/sql",
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-06-12T10:45:58.772Z",
-            "modified": "2023-06-13T10:24:07.877Z",
+            "modified": "2023-06-14T01:23:30.626Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -122,7 +122,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Setting an existing complaint to use an existing tag\nUPDATE complaints:ihqgl947eq3pgoeqdn1i \nSET tags = [\n    tags:nqjuqymico3236bwweb1\n];\n",
+                "raw": "UPDATE complaints:0o14dl9jaj26qu95p4t9\nSET tags = [\n    tags:nqjuqymico3236bwweb1\n];\n#SET submissionTime = \"2023-06-13T01:20:46.267Z\";",
                 "form": []
             },
             "auth": {
@@ -261,7 +261,7 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-13T09:47:11.296Z",
-            "modified": "2023-06-13T11:04:09.898Z",
+            "modified": "2023-06-13T23:15:32.890Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -409,6 +409,45 @@
             "body": {
                 "type": "json",
                 "raw": "{\n  \"name\": \"Test Tag\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "c03f7ac3-d0da-4e04-ad8e-32da633e2fc0",
+            "colId": "b8b1a967-a6d8-4cc1-88df-f2eaee824328",
+            "containerId": "ff4205c1-c09d-4a90-862c-bb1cd0c7d4e7",
+            "name": "Group Complaints into Time Bucket",
+            "url": "http://127.0.0.1:9000/sql",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-06-14T00:57:39.831Z",
+            "modified": "2023-06-14T01:25:31.587Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "// Select the complaints from the most recent x days / weeks\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > time::now() - 2d;\n\n// Split the tags out and group the submissionTime into a bucket (day)\nLET $complaintBucket = SELECT *, time::group(submissionTime, \"day\") AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\n\n// Get the number of complaints by tag per time bucket\nSELECT count() as total, timeBucket, tags FROM $complaintBucket GROUP BY timeBucket, tags;",
                 "form": []
             },
             "auth": {

@@ -223,7 +223,8 @@ export default function GetRage() {
                                 data={data[0].result}
                                 // showTableState
                             />
-                            <NivoLine data={data[0].result} />
+                            <NivoLine />
+                            {/* <NivoLine data={data[0].result} /> */}
                         </>
                     ) : (
                         <Typography variant="h4" gutterBottom>
