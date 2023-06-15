@@ -2,7 +2,13 @@ import { useState } from 'react'
 
 import ReactTable from './table/ReactTable'
 import TagEditDialog from './TagEditDialog'
-import { DATABASE_URL, Tag, ComplaintTableRow } from '../helpers/helpers'
+import {
+    DATABASE_URL,
+    Tag,
+    ComplaintTableRow,
+    NivoGraph,
+    SurrealTagFilter,
+} from '../helpers/helpers'
 
 import { Row, createColumnHelper } from '@tanstack/react-table'
 
@@ -50,11 +56,74 @@ const surrealData = [
     },
 ]
 
-function convertSurrealToNivo(dataSource) {
+const surrealData2 = [
+    {
+        tags: null,
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Cloud Ops',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Performance',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Test Tag',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 2,
+    },
+    {
+        tags: 'Test Tag 2',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 2,
+    },
+    {
+        tags: 'Test Tag 3',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Test Tag 4',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Test Tag 5',
+        timeBucket: '2023-06-09T00:00:00Z',
+        total: 2,
+    },
+    {
+        tags: 'Another Tag',
+        timeBucket: '2023-06-13T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Cloud Ops',
+        timeBucket: '2023-06-13T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Test Tag',
+        timeBucket: '2023-06-13T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Test Tag 2',
+        timeBucket: '2023-06-13T00:00:00Z',
+        total: 2,
+    },
+]
+
+function convertSurrealToNivo(dataSource: SurrealTagFilter[]) {
     const surrealLineData = new Map()
 
-    const newData = dataSource.map((item) => {
-        const key = item.tags
+    dataSource.map((item: SurrealTagFilter) => {
+        const key = item.tags ? item.tags : 'Not tagged'
         const value = {
             x: new Date(item.timeBucket),
             y: item.total,
@@ -69,21 +138,17 @@ function convertSurrealToNivo(dataSource) {
 
         surrealLineData.set(key, newValue)
     })
-    console.log('surrealLineData BEFORE', surrealLineData)
 
-    const newNivoData = []
+    const nivoData: NivoGraph[] = []
 
     surrealLineData.forEach((tagData, tagName) => {
-        newNivoData.push({
+        nivoData.push({
             id: tagName,
-            //"color": "rgb(0,0,0)",
             data: tagData,
         })
     })
 
-    console.log('surrealLineData AFTER', newNivoData)
-
-    return newNivoData
+    return nivoData
 }
 
 export default function GetRage() {
@@ -96,7 +161,7 @@ export default function GetRage() {
 
     const queryClient = useQueryClient()
 
-    const lineData = convertSurrealToNivo(surrealData)
+    const lineData = convertSurrealToNivo(surrealData2)
 
     const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
         setTagEditIsOpen(true)

@@ -18,3 +18,19 @@ export type Tag = {
     id: string
     name: string
 }
+
+type NivoGraphPoint = {
+    x: string | number
+    y: string | number
+}
+
+export type NivoGraph = {
+    id: string
+    data: NivoGraphPoint[]
+}
+
+export type SurrealTagFilter = {
+    tags: string | null
+    timeBucket: string
+    total: number
+}
