@@ -119,13 +119,36 @@ const surrealData2 = [
     },
 ]
 
+const surrealMin2 = {
+    timeBucket: '2023-06-09T00:00:00Z',
+}
+
+const surrealMax2 = {
+    timeBucket: '2023-06-13T00:00:00Z',
+}
+
+function getDaysArray(start: Date, end: Date, increment: number) {
+    const arr = []
+    for (
+        let dt = new Date(start);
+        dt <= new Date(end);
+        dt.setDate(dt.getDate() + increment)
+    ) {
+        arr.push(new Date(dt))
+    }
+    return arr
+}
+
 function convertSurrealToNivo(dataSource: SurrealTagFilter[]) {
     const surrealLineData = new Map()
 
     dataSource.map((item: SurrealTagFilter) => {
         const key = item.tags ? item.tags : 'Not tagged'
+
+        const timeBucketDate = new Date(item.timeBucket)
+
         const value = {
-            x: new Date(item.timeBucket),
+            x: timeBucketDate,
             y: item.total,
         }
 
@@ -147,6 +170,23 @@ function convertSurrealToNivo(dataSource: SurrealTagFilter[]) {
             data: tagData,
         })
     })
+
+    const daylist1 = getDaysArray(
+        new Date('2018-05-01'),
+        new Date('2018-07-01'),
+        1
+    )
+    const daylist2 = getDaysArray(
+        new Date('2018-05-01'),
+        new Date('2018-07-01'),
+        7
+    )
+    const daylist3 = getDaysArray(
+        new Date(surrealMin2.timeBucket),
+        new Date(surrealMax2.timeBucket),
+        1
+    )
+    console.log('nivoData', nivoData, daylist1, daylist2)
 
     return nivoData
 }

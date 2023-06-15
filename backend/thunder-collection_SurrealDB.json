@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-14T01:25:55.679Z",
+    "dateExported": "2023-06-15T12:39:49.567Z",
     "version": "1.1",
     "folders": [
         {
@@ -429,7 +429,7 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-14T00:57:39.831Z",
-            "modified": "2023-06-14T01:25:31.587Z",
+            "modified": "2023-06-15T12:29:42.572Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -447,7 +447,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Select the complaints from the most recent x days / weeks\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > time::now() - 2d;\n\n// Split the tags out and group the submissionTime into a bucket (day)\nLET $complaintBucket = SELECT *, time::group(submissionTime, \"day\") AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\n\n// Get the number of complaints by tag per time bucket\nSELECT count() as total, timeBucket, tags FROM $complaintBucket GROUP BY timeBucket, tags;",
+                "raw": "// Select the complaints from the most recent x days / weeks\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > time::now() - 1w;\n\n// Split the tags out and group the submissionTime into a bucket (day)\nLET $complaintBucket = SELECT *, time::group(submissionTime, \"day\") AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\n\n// Get the number of complaints by tag per time bucket\nLET $complaintTagList = SELECT count() as total, timeBucket, tags FROM $complaintBucket GROUP BY timeBucket, tags;\n\n// Return the list of filterred tags\nSELECT * FROM $complaintTagList;\n\nLET $dateRange = SELECT timeBucket FROM $complaintTagList;\n\n// Return the max and minimum date bucket from the list with the timeperiod\nSELECT * FROM array::min($dateRange), array::max($dateRange), { timePeriod: \"day\"};\n",
                 "form": []
             },
             "auth": {
