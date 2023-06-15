@@ -17,6 +17,75 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import NivoLine from './graph/NivoLine'
 
+const surrealData = [
+    {
+        tags: 'Adminnistration',
+        timeBucket: '2023-06-15T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Another Tag',
+        timeBucket: '2023-06-14T00:00:00Z',
+        total: 2,
+    },
+    {
+        tags: 'Adminnistration',
+        timeBucket: '2023-06-14T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'CloudOps',
+        timeBucket: '2023-06-14T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Adminnistration',
+        timeBucket: '2023-06-11T00:00:00Z',
+        total: 1,
+    },
+    {
+        tags: 'Performance',
+        timeBucket: '2023-06-11T00:00:00Z',
+        total: 1,
+    },
+]
+
+function convertSurrealToNivo(dataSource) {
+    const surrealLineData = new Map()
+
+    const newData = dataSource.map((item) => {
+        const key = item.tags
+        const value = {
+            x: new Date(item.timeBucket),
+            y: item.total,
+        }
+
+        let newValue = [value]
+
+        const existingData = surrealLineData.get(key)
+        if (existingData) {
+            newValue = [...existingData, value]
+        }
+
+        surrealLineData.set(key, newValue)
+    })
+    console.log('surrealLineData BEFORE', surrealLineData)
+
+    const newNivoData = []
+
+    surrealLineData.forEach((tagData, tagName) => {
+        newNivoData.push({
+            id: tagName,
+            //"color": "rgb(0,0,0)",
+            data: tagData,
+        })
+    })
+
+    console.log('surrealLineData AFTER', newNivoData)
+
+    return newNivoData
+}
+
 export default function GetRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
     const [tableRowToEdit, setTableRowToEdit] = useState<
@@ -26,6 +95,8 @@ export default function GetRage() {
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success')
 
     const queryClient = useQueryClient()
+
+    const lineData = convertSurrealToNivo(surrealData)
 
     const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
         setTagEditIsOpen(true)
@@ -223,8 +294,9 @@ export default function GetRage() {
                                 data={data[0].result}
                                 // showTableState
                             />
-                            <NivoLine />
+                            {/* <NivoLine /> */}
                             {/* <NivoLine data={data[0].result} /> */}
+                            <NivoLine data={lineData} />
                         </>
                     ) : (
                         <Typography variant="h4" gutterBottom>
