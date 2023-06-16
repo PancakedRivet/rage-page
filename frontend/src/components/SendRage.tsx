@@ -15,7 +15,7 @@ import SendIcon from '@mui/icons-material/Send'
 
 import { useMutation } from '@tanstack/react-query'
 
-export default function Rage() {
+export default function SendRage() {
     const formRef = React.useRef<HTMLFormElement>(null)
 
     const [snackbarIsOpen, setSnackbarIsOpen] = React.useState(false)

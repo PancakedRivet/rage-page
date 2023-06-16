@@ -24,109 +24,6 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import NivoLine from './graph/NivoLine'
 
-const surrealData: SurrealGraphQuery[] = [
-    {
-        metadata: {
-            tagList: [
-                {
-                    tag: null,
-                },
-                {
-                    tag: 'Cloud Ops',
-                },
-                {
-                    tag: 'Performance',
-                },
-                {
-                    tag: 'Test Tag',
-                },
-                {
-                    tag: 'Test Tag 2',
-                },
-                {
-                    tag: 'Test Tag 3',
-                },
-                {
-                    tag: 'Test Tag 4',
-                },
-                {
-                    tag: 'Test Tag 5',
-                },
-                {
-                    tag: 'Another Tag',
-                },
-            ],
-            time: {
-                maxDateTime: '2023-06-16T00:00:00Z',
-                minDateTime: '2023-06-09T00:00:00Z',
-                timePeriod: 'day',
-            },
-        },
-        result: [
-            {
-                tag: null,
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Cloud Ops',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Performance',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Test Tag',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 2,
-            },
-            {
-                tag: 'Test Tag 2',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 2,
-            },
-            {
-                tag: 'Test Tag 3',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Test Tag 4',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Test Tag 5',
-                timeBucket: '2023-06-09T00:00:00Z',
-                total: 2,
-            },
-            {
-                tag: 'Another Tag',
-                timeBucket: '2023-06-13T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Cloud Ops',
-                timeBucket: '2023-06-13T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Test Tag',
-                timeBucket: '2023-06-13T00:00:00Z',
-                total: 1,
-            },
-            {
-                tag: 'Test Tag 2',
-                timeBucket: '2023-06-13T00:00:00Z',
-                total: 2,
-            },
-        ],
-    },
-]
-
 function getDaysArray(start: Date, end: Date, increment: number) {
     const arr = []
     for (
@@ -194,7 +91,7 @@ function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
     return returnedDataForNivoLine
 }
 
-export default function GetRage() {
+export default function SeeRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
     const [tableRowToEdit, setTableRowToEdit] = useState<
         Row<ComplaintTableRow> | undefined
@@ -214,7 +111,7 @@ export default function GetRage() {
     LET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;
     LET $tagList = SELECT tag FROM $complaintTagList;
     LET $result = SELECT * FROM $complaintTagList;
-    LET $metaTagList = SELECT tag FROM array::distinct($tagList);
+    LET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;
     LET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };
 
     SELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };`
@@ -268,7 +165,7 @@ export default function GetRage() {
             })
     )
 
-    const { data } = useQuery({
+    const { data: complaintData } = useQuery({
         queryKey: ['complaints'],
         queryFn: () =>
             fetch(DATABASE_URL + 'key/complaints', {
@@ -279,7 +176,13 @@ export default function GetRage() {
                     NS: 'test',
                     DB: 'test',
                 },
-            }).then((res) => res.json()),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    // Only save the object that contains the results we want.
+                    // There is only one item in the array
+                    return res[0].result
+                }),
         enabled: !!tagData,
     })
 
@@ -440,7 +343,6 @@ export default function GetRage() {
         }
         return null
     }, [graphData])
-    // const lineData = convertSurrealToNivo(surrealData[0])
 
     return (
         <>
@@ -449,11 +351,11 @@ export default function GetRage() {
                     <Typography variant="h2" gutterBottom>
                         Rages Sent:
                     </Typography>
-                    {data && data[0].result?.length > 0 ? (
+                    {complaintData && complaintData.length > 0 ? (
                         <>
                             <ReactTable
                                 columns={columns}
-                                data={data[0].result}
+                                data={complaintData}
                                 // showTableState
                             />
                             {lineData && <NivoLine data={lineData} />}

@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-16T06:21:45.784Z",
+    "dateExported": "2023-06-16T11:38:43.702Z",
     "version": "1.1",
     "folders": [
         {
@@ -429,7 +429,7 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-14T00:57:39.831Z",
-            "modified": "2023-06-16T05:46:37.784Z",
+            "modified": "2023-06-16T11:38:38.632Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -447,7 +447,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $result = SELECT * FROM $complaintTagList;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList);\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
+                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $result = SELECT * FROM $complaintTagList;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
                 "form": []
             },
             "auth": {
