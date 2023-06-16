@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import ReactTable from './table/ReactTable'
 import TagEditDialog from './TagEditDialog'
@@ -204,6 +204,21 @@ export default function GetRage() {
 
     const queryClient = useQueryClient()
 
+    const surrealQueryForGraph = `
+    LET $bucket = "day"; 
+    LET $endDateTime = time::group(time::now(), $bucket);
+    LET $startDateTime = $endDateTime - 1w;
+
+    LET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;
+    LET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;
+    LET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;
+    LET $tagList = SELECT tag FROM $complaintTagList;
+    LET $result = SELECT * FROM $complaintTagList;
+    LET $metaTagList = SELECT tag FROM array::distinct($tagList);
+    LET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };
+
+    SELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };`
+
     const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
         setTagEditIsOpen(true)
         setTableRowToEdit(row)
@@ -268,6 +283,34 @@ export default function GetRage() {
         enabled: !!tagData,
     })
 
+    const { data: graphData } = useQuery({
+        queryKey: ['graphData'],
+        queryFn: () =>
+            fetch(DATABASE_URL + 'sql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    Authorization: 'Basic ' + btoa('root:root'),
+                    NS: 'test',
+                    DB: 'test',
+                },
+                body: surrealQueryForGraph,
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error('An error ocurred')
+                    }
+                    return res.json()
+                })
+                .then((res) => {
+                    // Only save the object that contains the results we want.
+                    // It's always the last item in the array
+                    const results = res[res.length - 1].result
+                    return results[0]
+                }),
+    })
+
     const updateTags = useMutation(
         (postBody: string) =>
             fetch(DATABASE_URL + 'sql', {
@@ -290,7 +333,12 @@ export default function GetRage() {
             onSuccess: () => {
                 setAlertSeverity('success')
                 setSnackbarIsOpen(true)
-                queryClient.invalidateQueries({ queryKey: ['complaints'] })
+                queryClient.invalidateQueries({
+                    queryKey: ['complaints'],
+                })
+                queryClient.invalidateQueries({
+                    queryKey: ['graphData'],
+                })
             },
             onError: () => {
                 setAlertSeverity('error')
@@ -386,7 +434,13 @@ export default function GetRage() {
         }),
     ]
 
-    const lineData = convertSurrealToNivo(surrealData[0])
+    const lineData = useMemo(() => {
+        if (graphData) {
+            return convertSurrealToNivo(graphData)
+        }
+        return null
+    }, [graphData])
+    // const lineData = convertSurrealToNivo(surrealData[0])
 
     return (
         <>
@@ -402,9 +456,7 @@ export default function GetRage() {
                                 data={data[0].result}
                                 // showTableState
                             />
-                            {/* <NivoLine /> */}
-                            {/* <NivoLine data={data[0].result} /> */}
-                            <NivoLine data={lineData} />
+                            {lineData && <NivoLine data={lineData} />}
                         </>
                     ) : (
                         <Typography variant="h4" gutterBottom>
