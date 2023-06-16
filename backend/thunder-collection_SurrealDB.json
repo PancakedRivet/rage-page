@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-15T12:39:49.567Z",
+    "dateExported": "2023-06-16T06:21:45.784Z",
     "version": "1.1",
     "folders": [
         {
@@ -300,7 +300,7 @@
             "method": "POST",
             "sortNum": 25000,
             "created": "2023-06-12T08:25:57.823Z",
-            "modified": "2023-06-13T10:44:21.077Z",
+            "modified": "2023-06-16T05:16:39.320Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -318,7 +318,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\n#SELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n\nSELECT * FROM tags;\nSELECT id, name FROM tags WHERE name INSIDE \"Test\";\nSELECT id, name FROM tags WHERE tags CONTAINSANY \"Test\";",
+                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\n#SELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n\nSELECT * FROM tags;\nSELECT id, name FROM tags WHERE name INSIDE \"Test\";\nSELECT id, name FROM tags WHERE tags CONTAINSANY \"Test\";\n\n// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n#LET $complaintsInDateRange = SELECT *, tags.name as tags, time::group(submissionTime, $bucket) AS timeBucket FROM $complaintDateRange, tags WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;",
                 "form": []
             },
             "auth": {
@@ -429,7 +429,7 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-14T00:57:39.831Z",
-            "modified": "2023-06-15T12:29:42.572Z",
+            "modified": "2023-06-16T05:46:37.784Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -447,7 +447,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Select the complaints from the most recent x days / weeks\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > time::now() - 1w;\n\n// Split the tags out and group the submissionTime into a bucket (day)\nLET $complaintBucket = SELECT *, time::group(submissionTime, \"day\") AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\n\n// Get the number of complaints by tag per time bucket\nLET $complaintTagList = SELECT count() as total, timeBucket, tags FROM $complaintBucket GROUP BY timeBucket, tags;\n\n// Return the list of filterred tags\nSELECT * FROM $complaintTagList;\n\nLET $dateRange = SELECT timeBucket FROM $complaintTagList;\n\n// Return the max and minimum date bucket from the list with the timeperiod\nSELECT * FROM array::min($dateRange), array::max($dateRange), { timePeriod: \"day\"};\n",
+                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $result = SELECT * FROM $complaintTagList;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList);\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
                 "form": []
             },
             "auth": {

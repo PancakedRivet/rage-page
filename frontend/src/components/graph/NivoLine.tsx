@@ -309,11 +309,12 @@ const exampleLineData = [
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const NivoLine = ({ data }: any) => (
     <div className="nivo">
         <ResponsiveLine
             data={data}
-            // data={data ? data : exampleData}
             // data={exampleLineData}
             margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
             xScale={{
@@ -325,7 +326,6 @@ const NivoLine = ({ data }: any) => (
             xFormat="time:%Y-%m-%d"
             yScale={{
                 type: 'linear',
-                // stacked: boolean('stacked', false),
             }}
             axisLeft={{
                 tickSize: 5,
@@ -347,6 +347,7 @@ const NivoLine = ({ data }: any) => (
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}
             pointLabelYOffset={-12}
+            colors={{ scheme: 'set1' }}
             useMesh={true}
             enableSlices={false}
             legends={[
@@ -379,22 +380,22 @@ const NivoLine = ({ data }: any) => (
     </div>
 )
 
-const CustomSymbol = ({ size, color, borderWidth, borderColor }) => (
-    <g>
-        <circle
-            fill="#fff"
-            r={size / 2}
-            strokeWidth={borderWidth}
-            stroke={borderColor}
-        />
-        <circle
-            r={size / 5}
-            strokeWidth={borderWidth}
-            stroke={borderColor}
-            fill={color}
-            fillOpacity={0.35}
-        />
-    </g>
-)
+// const CustomSymbol = ({ size, color, borderWidth, borderColor }) => (
+//     <g>
+//         <circle
+//             fill="#fff"
+//             r={size / 2}
+//             strokeWidth={borderWidth}
+//             stroke={borderColor}
+//         />
+//         <circle
+//             r={size / 5}
+//             strokeWidth={borderWidth}
+//             stroke={borderColor}
+//             fill={color}
+//             fillOpacity={0.35}
+//         />
+//     </g>
+// )
 
 export default NivoLine

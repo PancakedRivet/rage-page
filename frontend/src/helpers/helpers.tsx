@@ -20,7 +20,7 @@ export type Tag = {
 }
 
 type NivoGraphPoint = {
-    x: string | number
+    x: string | number | Date
     y: string | number
 }
 
@@ -29,8 +29,26 @@ export type NivoGraph = {
     data: NivoGraphPoint[]
 }
 
+type SurrealGraphMetaDataTagList = {
+    tag: string | null
+}
+
+type SurrealGraphMetaData = {
+    tagList: SurrealGraphMetaDataTagList[]
+    time: {
+        maxDateTime: string
+        minDateTime: string
+        timePeriod: string
+    }
+}
+
 export type SurrealTagFilter = {
-    tags: string | null
+    tag: string | null
     timeBucket: string
     total: number
+}
+
+export type SurrealGraphQuery = {
+    result: SurrealTagFilter[]
+    metadata: SurrealGraphMetaData
 }

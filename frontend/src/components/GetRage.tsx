@@ -7,6 +7,7 @@ import {
     Tag,
     ComplaintTableRow,
     NivoGraph,
+    SurrealGraphQuery,
     SurrealTagFilter,
 } from '../helpers/helpers'
 
@@ -23,109 +24,108 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import NivoLine from './graph/NivoLine'
 
-const surrealData = [
+const surrealData: SurrealGraphQuery[] = [
     {
-        tags: 'Adminnistration',
-        timeBucket: '2023-06-15T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Another Tag',
-        timeBucket: '2023-06-14T00:00:00Z',
-        total: 2,
-    },
-    {
-        tags: 'Adminnistration',
-        timeBucket: '2023-06-14T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'CloudOps',
-        timeBucket: '2023-06-14T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Adminnistration',
-        timeBucket: '2023-06-11T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Performance',
-        timeBucket: '2023-06-11T00:00:00Z',
-        total: 1,
+        metadata: {
+            tagList: [
+                {
+                    tag: null,
+                },
+                {
+                    tag: 'Cloud Ops',
+                },
+                {
+                    tag: 'Performance',
+                },
+                {
+                    tag: 'Test Tag',
+                },
+                {
+                    tag: 'Test Tag 2',
+                },
+                {
+                    tag: 'Test Tag 3',
+                },
+                {
+                    tag: 'Test Tag 4',
+                },
+                {
+                    tag: 'Test Tag 5',
+                },
+                {
+                    tag: 'Another Tag',
+                },
+            ],
+            time: {
+                maxDateTime: '2023-06-16T00:00:00Z',
+                minDateTime: '2023-06-09T00:00:00Z',
+                timePeriod: 'day',
+            },
+        },
+        result: [
+            {
+                tag: null,
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Cloud Ops',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Performance',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Test Tag',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 2,
+            },
+            {
+                tag: 'Test Tag 2',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 2,
+            },
+            {
+                tag: 'Test Tag 3',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Test Tag 4',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Test Tag 5',
+                timeBucket: '2023-06-09T00:00:00Z',
+                total: 2,
+            },
+            {
+                tag: 'Another Tag',
+                timeBucket: '2023-06-13T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Cloud Ops',
+                timeBucket: '2023-06-13T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Test Tag',
+                timeBucket: '2023-06-13T00:00:00Z',
+                total: 1,
+            },
+            {
+                tag: 'Test Tag 2',
+                timeBucket: '2023-06-13T00:00:00Z',
+                total: 2,
+            },
+        ],
     },
 ]
-
-const surrealData2 = [
-    {
-        tags: null,
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Cloud Ops',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Performance',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Test Tag',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 2,
-    },
-    {
-        tags: 'Test Tag 2',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 2,
-    },
-    {
-        tags: 'Test Tag 3',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Test Tag 4',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Test Tag 5',
-        timeBucket: '2023-06-09T00:00:00Z',
-        total: 2,
-    },
-    {
-        tags: 'Another Tag',
-        timeBucket: '2023-06-13T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Cloud Ops',
-        timeBucket: '2023-06-13T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Test Tag',
-        timeBucket: '2023-06-13T00:00:00Z',
-        total: 1,
-    },
-    {
-        tags: 'Test Tag 2',
-        timeBucket: '2023-06-13T00:00:00Z',
-        total: 2,
-    },
-]
-
-const surrealMin2 = {
-    timeBucket: '2023-06-09T00:00:00Z',
-}
-
-const surrealMax2 = {
-    timeBucket: '2023-06-13T00:00:00Z',
-}
 
 function getDaysArray(start: Date, end: Date, increment: number) {
     const arr = []
@@ -134,61 +134,64 @@ function getDaysArray(start: Date, end: Date, increment: number) {
         dt <= new Date(end);
         dt.setDate(dt.getDate() + increment)
     ) {
-        arr.push(new Date(dt))
+        // arr.push(new Date(dt))
+        arr.push(dt.toDateString())
     }
     return arr
 }
 
-function convertSurrealToNivo(dataSource: SurrealTagFilter[]) {
-    const surrealLineData = new Map()
+function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
+    const lineDataForTag = new Map()
 
-    dataSource.map((item: SurrealTagFilter) => {
-        const key = item.tags ? item.tags : 'Not tagged'
+    const daylist = getDaysArray(
+        new Date(surrealQueryData.metadata.time.minDateTime),
+        new Date(surrealQueryData.metadata.time.maxDateTime),
+        1
+    )
 
-        const timeBucketDate = new Date(item.timeBucket)
+    // intially setting each date to 0 total
+    surrealQueryData.metadata.tagList.map((tag) => {
+        const key = tag.tag ? tag.tag : 'Not tagged'
 
-        const value = {
-            x: timeBucketDate,
-            y: item.total,
-        }
+        const zeroDataMap = new Map()
 
-        let newValue = [value]
+        daylist.map((date) => {
+            zeroDataMap.set(date, 0)
+        })
 
-        const existingData = surrealLineData.get(key)
-        if (existingData) {
-            newValue = [...existingData, value]
-        }
-
-        surrealLineData.set(key, newValue)
+        lineDataForTag.set(key, zeroDataMap)
     })
 
-    const nivoData: NivoGraph[] = []
+    // update the date to reflect the correct totals
+    surrealQueryData.result.map((item: SurrealTagFilter) => {
+        const key = item.tag ? item.tag : 'Not tagged'
+        // Get the map for a specific tag
+        const dataMap = lineDataForTag.get(key) // (dateTime, 0)
 
-    surrealLineData.forEach((tagData, tagName) => {
-        nivoData.push({
+        // Update the new total for the specific timebucket
+        const dateString = new Date(item.timeBucket)
+        // dataMap.set(new Date(item.timeBucket), item.total)
+        dataMap.set(dateString.toDateString(), item.total)
+
+        // Update the map with the new total (as it was 0 and each item has a unique timeBucket and tag combination
+        lineDataForTag.set(key, dataMap)
+    })
+
+    const returnedDataForNivoLine: NivoGraph[] = []
+
+    // Shape the data into an array for returning
+    lineDataForTag.forEach((dataMap, tagName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const dataArray = Array.from(dataMap, function (entry: any) {
+            return { x: new Date(entry[0]), y: entry[1] }
+        })
+        returnedDataForNivoLine.push({
             id: tagName,
-            data: tagData,
+            data: dataArray,
         })
     })
 
-    const daylist1 = getDaysArray(
-        new Date('2018-05-01'),
-        new Date('2018-07-01'),
-        1
-    )
-    const daylist2 = getDaysArray(
-        new Date('2018-05-01'),
-        new Date('2018-07-01'),
-        7
-    )
-    const daylist3 = getDaysArray(
-        new Date(surrealMin2.timeBucket),
-        new Date(surrealMax2.timeBucket),
-        1
-    )
-    console.log('nivoData', nivoData, daylist1, daylist2)
-
-    return nivoData
+    return returnedDataForNivoLine
 }
 
 export default function GetRage() {
@@ -200,8 +203,6 @@ export default function GetRage() {
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success')
 
     const queryClient = useQueryClient()
-
-    const lineData = convertSurrealToNivo(surrealData2)
 
     const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
         setTagEditIsOpen(true)
@@ -384,6 +385,8 @@ export default function GetRage() {
             ),
         }),
     ]
+
+    const lineData = convertSurrealToNivo(surrealData[0])
 
     return (
         <>
