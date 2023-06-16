@@ -33,7 +33,6 @@ function getDaysArray(start: Date, end: Date, increment: number) {
         dt <= new Date(end);
         dt.setDate(dt.getDate() + increment)
     ) {
-        // arr.push(new Date(dt))
         arr.push(dt.toDateString())
     }
     return arr
@@ -48,7 +47,7 @@ function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
         1
     )
 
-    // intially setting each date to 0 total
+    // Intially setting each date to 0 total
     surrealQueryData.metadata.tagList.map((tag) => {
         const key = tag.tag ? tag.tag : 'Not tagged'
 
@@ -61,15 +60,14 @@ function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
         lineDataForTag.set(key, zeroDataMap)
     })
 
-    // update the date to reflect the correct totals
+    // Update the date to reflect the correct totals
     surrealQueryData.result.map((item: SurrealTagFilter) => {
         const key = item.tag ? item.tag : 'Not tagged'
         // Get the map for a specific tag
-        const dataMap = lineDataForTag.get(key) // (dateTime, 0)
+        const dataMap = lineDataForTag.get(key)
 
         // Update the new total for the specific timebucket
         const dateString = new Date(item.timeBucket)
-        // dataMap.set(new Date(item.timeBucket), item.total)
         dataMap.set(dateString.toDateString(), item.total)
 
         // Update the map with the new total (as it was 0 and each item has a unique timeBucket and tag combination
