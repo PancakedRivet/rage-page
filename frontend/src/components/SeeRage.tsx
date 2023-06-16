@@ -19,8 +19,10 @@ import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
+import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 import NivoLine from './graph/NivoLine'
 
@@ -93,10 +95,12 @@ function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
 
 export default function SeeRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
+    const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
+    const [isShowingGraph, setIsShowingGraph] = useState(false)
+
     const [tableRowToEdit, setTableRowToEdit] = useState<
         Row<ComplaintTableRow> | undefined
     >(undefined)
-    const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success')
 
     const queryClient = useQueryClient()
@@ -115,6 +119,12 @@ export default function SeeRage() {
     LET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };
 
     SELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };`
+
+    const handleChangeDisplay = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setIsShowingGraph(event.target.checked)
+    }
 
     const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
         setTagEditIsOpen(true)
@@ -346,19 +356,23 @@ export default function SeeRage() {
 
     return (
         <>
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: '100%', height: '100%' }}>
                 <Stack spacing={2}>
                     <Typography variant="h2" gutterBottom>
                         Rages Sent:
                     </Typography>
                     {complaintData && complaintData.length > 0 ? (
                         <>
-                            <ReactTable
-                                columns={columns}
-                                data={complaintData}
-                                // showTableState
-                            />
-                            {lineData && <NivoLine data={lineData} />}
+                            {!isShowingGraph && (
+                                <ReactTable
+                                    columns={columns}
+                                    data={complaintData}
+                                    // showTableState
+                                />
+                            )}
+                            {isShowingGraph && lineData && (
+                                <NivoLine data={lineData} />
+                            )}
                         </>
                     ) : (
                         <Typography variant="h4" gutterBottom>
@@ -393,6 +407,17 @@ export default function SeeRage() {
                         : 'Oh no, something went wrong!'}
                 </Alert>
             </Snackbar>
+            <FormControlLabel
+                sx={{ m: 1, top: 0, right: 0, position: 'absolute' }}
+                control={
+                    <Switch
+                        checked={isShowingGraph}
+                        onChange={handleChangeDisplay}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                }
+                label={isShowingGraph ? 'Hide Graph' : 'Show Graph'}
+            />
         </>
     )
 }
