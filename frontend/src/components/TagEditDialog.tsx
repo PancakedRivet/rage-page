@@ -107,7 +107,12 @@ export default function TagEditDialog(props: SimpleDialogProps) {
                     onChange={handleUpdateTagFilter}
                 />
                 {filteredTags.length === 0 && tagFilterText !== '' && (
-                    <Button fullWidth onClick={handleCreateTag}>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={handleCreateTag}
+                        color="secondary"
+                    >
                         Create Tag: {tagFilterText}
                     </Button>
                 )}
