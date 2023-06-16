@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import Rage from './components/Rage.tsx'
 import GetRage from './components/GetRage.tsx'
 import MateriaThemeProvider from './components/MateriaThemeContext.tsx'
@@ -16,10 +15,6 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <Rage />,
-    },
-    {
-        path: '/app',
-        element: <App />,
     },
     {
         path: '/get',
