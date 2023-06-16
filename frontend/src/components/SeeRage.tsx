@@ -356,7 +356,7 @@ export default function SeeRage() {
 
     return (
         <>
-            <Box sx={{ width: '100%', height: '100%' }}>
+            <Box sx={{ width: '100%' }}>
                 <Stack spacing={2}>
                     <Typography variant="h2" gutterBottom>
                         Rages Sent:
