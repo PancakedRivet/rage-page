@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-16T11:38:43.702Z",
+    "dateExported": "2023-06-17T04:37:03.447Z",
     "version": "1.1",
     "folders": [
         {
@@ -36,7 +36,7 @@
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-06-09T13:57:45.399Z",
-            "modified": "2023-06-12T08:09:31.194Z",
+            "modified": "2023-06-17T01:54:11.152Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -429,7 +429,7 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-06-14T00:57:39.831Z",
-            "modified": "2023-06-16T11:38:38.632Z",
+            "modified": "2023-06-17T04:05:28.030Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -447,7 +447,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $result = SELECT * FROM $complaintTagList;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
+                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket) + 1d;\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $result = SELECT * FROM $complaintTagList;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
                 "form": []
             },
             "auth": {
@@ -513,7 +513,7 @@
             "method": "DELETE",
             "sortNum": 35000,
             "created": "2023-06-09T14:12:36.489Z",
-            "modified": "2023-06-12T08:52:02.928Z",
+            "modified": "2023-06-17T04:35:40.908Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -531,14 +531,8 @@
             "params": [
                 {
                     "name": "id",
-                    "value": "testcomplaint",
+                    "value": "7hqa164i6vh1fq1crguk",
                     "isPath": true
-                },
-                {
-                    "name": "id",
-                    "value": "",
-                    "isDisabled": true,
-                    "isPath": false
                 }
             ],
             "auth": {

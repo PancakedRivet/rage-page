@@ -10,6 +10,7 @@ import {
     SurrealGraphQuery,
     SurrealTagFilter,
     SURREAL_HEADERS,
+    Complaint,
 } from '../helpers/helpers'
 
 import { Row, createColumnHelper } from '@tanstack/react-table'
@@ -105,8 +106,8 @@ export default function SeeRage() {
     const queryClient = useQueryClient()
 
     const surrealQueryForGraph = `
-    LET $bucket = "day"; 
-    LET $endDateTime = time::group(time::now(), $bucket);
+    LET $bucket = "day";
+    LET $endDateTime = time::group(time::now(), $bucket) + 1d;
     LET $startDateTime = $endDateTime - 1w;
 
     LET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;
@@ -180,7 +181,17 @@ export default function SeeRage() {
                 .then((res) => {
                     // Only save the object that contains the results we want.
                     // There is only one item in the array
-                    return res[0].result
+                    const sortedComplaints = res[0].result.sort(
+                        (complaint1: Complaint, complaint2: Complaint) =>
+                            new Date(complaint1.submissionTime) <
+                            new Date(complaint2.submissionTime)
+                                ? 1
+                                : new Date(complaint1.submissionTime) >
+                                  new Date(complaint2.submissionTime)
+                                ? -1
+                                : 0
+                    )
+                    return sortedComplaints
                 }),
         enabled: !!tagData,
     })

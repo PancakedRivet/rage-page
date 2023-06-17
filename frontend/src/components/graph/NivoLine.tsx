@@ -40,6 +40,7 @@ const NivoLine = ({ data }: any) => {
             <ResponsiveLine
                 data={filteredData}
                 // data={exampleLineData}
+                curve="monotoneX"
                 theme={isDarkMode ? DARK : LIGHT}
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                 xScale={{
@@ -56,14 +57,13 @@ const NivoLine = ({ data }: any) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'count',
+                    legend: 'Tag Count',
                     legendOffset: -40,
                     legendPosition: 'middle',
                 }}
                 axisBottom={{
-                    format: '%b %d',
+                    format: '%b %d %y',
                     tickValues: 'every 2 days',
-                    legend: 'time scale',
                     legendOffset: -12,
                 }}
                 enablePointLabel={true}
