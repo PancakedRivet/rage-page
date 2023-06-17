@@ -1,21 +1,17 @@
 import { useMemo, useState } from 'react'
 
-import ReactTable from './table/ReactTable'
-import TagEditDialog from './TagEditDialog'
 import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
 
 import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 
 import NivoLine from './graph/NivoLine'
 
-import { Row, createColumnHelper } from '@tanstack/react-table'
+import { Row } from '@tanstack/react-table'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
@@ -30,17 +26,14 @@ import Typography from '@mui/material/Typography'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
 import { NivoPie } from './graph/NivoPie'
+import RageTable from './RageTable'
 
 export default function SeeRage() {
-    const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
     const [isShowingGraph, setIsShowingGraph] = useState(false)
     const [numberOfWeeksToQuery, setNumberOfWeeksToQuery] =
         useState<string>('1')
 
-    const [tableRowToEdit, setTableRowToEdit] = useState<
-        Row<ComplaintTableRow> | undefined
-    >(undefined)
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>('success')
 
     const queryClient = useQueryClient()
@@ -68,11 +61,6 @@ export default function SeeRage() {
         setIsShowingGraph(event.target.checked)
     }
 
-    const handleClickOpenTagEdit = (row: Row<ComplaintTableRow>) => {
-        setTagEditIsOpen(true)
-        setTableRowToEdit(row)
-    }
-
     const handleCreateTag = (newTagName: string) => {
         const jsonTag = JSON.stringify({
             name: newTagName,
@@ -80,17 +68,14 @@ export default function SeeRage() {
         createTag.mutate(jsonTag)
     }
 
-    const handleUpdateTagEdit = (selectedTags: Tag[]) => {
+    const handleUpdateTagEdit = (
+        selectedTags: Tag[],
+        tableRowToEdit: Row<ComplaintTableRow>
+    ) => {
         const complaintId = tableRowToEdit?.original.id
         const newTagIds = selectedTags.map((tag) => tag.id)
         const query = `UPDATE ${complaintId} SET tags = [${newTagIds}];`
         updateTags.mutate(query)
-        setTagEditIsOpen(false)
-    }
-
-    const handleCloseTagEdit = () => {
-        setTagEditIsOpen(false)
-        setTableRowToEdit(undefined)
     }
 
     const handleCloseSnackbar = () => {
@@ -223,62 +208,6 @@ export default function SeeRage() {
         }
     )
 
-    const columnHelper = createColumnHelper<ComplaintTableRow>()
-    const columns = [
-        columnHelper.accessor('id', {
-            header: 'Id',
-            cell: (info) => info.getValue(),
-        }),
-        columnHelper.accessor('submissionTime', {
-            header: 'Time',
-            cell: (info) => info.getValue(),
-        }),
-        columnHelper.accessor('complaint', {
-            header: 'Complaint',
-            cell: (info) => info.getValue(),
-        }),
-        columnHelper.accessor('tags', {
-            header: 'Tags',
-            cell: (info) => {
-                const cellValue = info.getValue()
-                if (Array.isArray(cellValue)) {
-                    // If the data is an array, try get the names of the tags associated
-                    // Adjust shape from result to map
-                    const tagMap: Map<string, string> = new Map(
-                        tagData.map((obj: Tag) => {
-                            return [obj.id, obj.name]
-                        })
-                    )
-                    const tagList = cellValue.map((val) => tagMap?.get(val))
-                    return (
-                        <Stack
-                            spacing={{ xs: 1, sm: 2 }}
-                            direction="row"
-                            useFlexGap
-                            flexWrap="wrap"
-                        >
-                            {tagList.map((tag, idx) => {
-                                return <Chip key={idx} label={tag} />
-                            })}
-                        </Stack>
-                    )
-                }
-                return info.getValue()
-            },
-        }),
-        columnHelper.accessor('edit', {
-            header: 'Edit Tags',
-            cell: ({ row }) => (
-                <Button
-                    variant="outlined"
-                    onClick={() => handleClickOpenTagEdit(row)}
-                >
-                    Edit Tags
-                </Button>
-            ),
-        }),
-    ]
-
     const lineData = useMemo(() => {
         if (graphData) {
             return convertSurrealQueryToNivoLine(graphData)
@@ -295,6 +224,17 @@ export default function SeeRage() {
 
     return (
         <>
+            <FormControlLabel
+                sx={{ m: 1, top: 0, right: 0, position: 'absolute' }}
+                control={
+                    <Switch
+                        checked={isShowingGraph}
+                        onChange={handleChangeDisplay}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                }
+                label={isShowingGraph ? 'Hide Graph' : 'Show Graph'}
+            />
             <Box sx={{ width: '100%' }}>
                 <Stack spacing={2}>
                     <Typography variant="h2" gutterBottom>
@@ -303,10 +243,11 @@ export default function SeeRage() {
                     {complaintData && complaintData.length > 0 ? (
                         <>
                             {!isShowingGraph && (
-                                <ReactTable
-                                    columns={columns}
-                                    data={complaintData}
-                                    // showTableState
+                                <RageTable
+                                    tagData={tagData}
+                                    complaintData={complaintData}
+                                    onCreateTag={handleCreateTag}
+                                    onUpdateTag={handleUpdateTagEdit}
                                 />
                             )}
                             {isShowingGraph && lineData && (
@@ -362,16 +303,6 @@ export default function SeeRage() {
                         </Typography>
                     )}
                 </Stack>
-                {tableRowToEdit && tagData && (
-                    <TagEditDialog
-                        tableRowToEdit={tableRowToEdit}
-                        tagList={tagData}
-                        open={tagEditIsOpen}
-                        onCreate={handleCreateTag}
-                        onUpdate={handleUpdateTagEdit}
-                        onClose={handleCloseTagEdit}
-                    />
-                )}
             </Box>
             <Snackbar
                 open={snackbarIsOpen}
@@ -389,17 +320,6 @@ export default function SeeRage() {
                         : 'Oh no, something went wrong!'}
                 </Alert>
             </Snackbar>
-            <FormControlLabel
-                sx={{ m: 1, top: 0, right: 0, position: 'absolute' }}
-                control={
-                    <Switch
-                        checked={isShowingGraph}
-                        onChange={handleChangeDisplay}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                }
-                label={isShowingGraph ? 'Hide Graph' : 'Show Graph'}
-            />
         </>
     )
 }
