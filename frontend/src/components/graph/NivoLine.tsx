@@ -12,12 +12,10 @@ import { NivoGraph } from '../../helpers/helpers'
 
 type Series = {
     id: string | number
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any
     color?: string | undefined
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const NivoLine = ({ data }: any) => {
     const theme = useTheme()
     const isDarkMode = theme.palette.mode === 'light' ? false : true
@@ -191,7 +189,6 @@ const HighlightLine = (
         xScale: (x: number | string) => any
         yScale: (y: number | string) => any
     },
-    // thing,
     highlightedId: string | number | null
 ) => {
     const calculateOpacity = (id: string | number) => {
