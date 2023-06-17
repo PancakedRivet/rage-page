@@ -13,26 +13,33 @@ export function LoginPage() {
         event.preventDefault()
 
         const formData = new FormData(event.currentTarget)
-        const username = formData.get('username') as string
+        const password = formData.get('password') as string
 
-        auth.signin(username, () => {
-            // Send them back to the page they tried to visit when they were
-            // redirected to the login page. Use { replace: true } so we don't create
-            // another entry in the history stack for the login page.  This means that
-            // when they get to the protected page and click the back button, they
-            // won't end up back on the login page, which is also really nice for the
-            // user experience.
-            navigate(from, { replace: true })
-        })
+        if (password === import.meta.env.VITE_ADMIN_PASSWORD) {
+            auth.signin(() => {
+                // Send them back to the page they tried to visit when they were
+                // redirected to the login page. Use { replace: true } so we don't create
+                // another entry in the history stack for the login page.  This means that
+                // when they get to the protected page and click the back button, they
+                // won't end up back on the login page, which is also really nice for the
+                // user experience.
+                navigate(from, { replace: true })
+            })
+        }
     }
 
     return (
         <div>
             <p>You must log in to view the page at {from}</p>
 
+            <pre>
+                import.meta.env.VITE_ADMIN_PASSWORD:{' '}
+                {import.meta.env.VITE_ADMIN_PASSWORD}
+            </pre>
+
             <form onSubmit={handleSubmit}>
                 <label>
-                    Username: <input name="username" type="text" />
+                    Password: <input name="password" type="password" />
                 </label>{' '}
                 <button type="submit">Login</button>
             </form>
@@ -40,33 +47,11 @@ export function LoginPage() {
     )
 }
 
-export function AuthStatus() {
-    const auth = useAuth()
-    const navigate = useNavigate()
-
-    if (!auth.user) {
-        return <p>You are not logged in.</p>
-    }
-
-    return (
-        <p>
-            Welcome {auth.user}!{' '}
-            <button
-                onClick={() => {
-                    auth.signout(() => navigate('/'))
-                }}
-            >
-                Sign out
-            </button>
-        </p>
-    )
-}
-
 export function RequireAuth({ children }: { children: JSX.Element }) {
     const auth = useAuth()
     const location = useLocation()
 
-    if (!auth.user) {
+    if (!auth.isLoggedIn) {
         // Redirect them to the /login page, but save the current location they were
         // trying to go to when they were redirected. This allows us to send them
         // along to that page after they login, which is a nicer user experience

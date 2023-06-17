@@ -1,8 +1,8 @@
 import React from 'react'
 
 interface AuthContextType {
-    user: any
-    signin: (user: string, callback: VoidFunction) => void
+    isLoggedIn: boolean
+    signin: (callback: VoidFunction) => void
     signout: (callback: VoidFunction) => void
 }
 
@@ -13,35 +13,19 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = React.useState<any>(null)
+    const [isLoggedIn, setIsLoggedIn] = React.useState<boolean>(false)
 
-    const signin = (newUser: string, callback: VoidFunction) => {
-        return fakeAuthProvider.signin(() => {
-            setUser(newUser)
-            callback()
-        })
+    const signin = (callback: VoidFunction) => {
+        setIsLoggedIn(true)
+        return callback()
     }
 
     const signout = (callback: VoidFunction) => {
-        return fakeAuthProvider.signout(() => {
-            setUser(null)
-            callback()
-        })
+        setIsLoggedIn(false)
+        return callback()
     }
 
-    const value = { user, signin, signout }
+    const value = { isLoggedIn, signin, signout }
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-const fakeAuthProvider = {
-    isAuthenticated: false,
-    signin(callback: VoidFunction) {
-        fakeAuthProvider.isAuthenticated = true
-        setTimeout(callback, 100) // fake async
-    },
-    signout(callback: VoidFunction) {
-        fakeAuthProvider.isAuthenticated = false
-        setTimeout(callback, 100)
-    },
 }
