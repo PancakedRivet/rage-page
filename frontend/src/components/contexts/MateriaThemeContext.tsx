@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import Switch from '@mui/material/Switch'
 
 interface Props {
@@ -56,12 +57,14 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }))
 
 export default function MateriaThemeProvider({ children }: Props) {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
     const loadTheme = () => {
         const theme = localStorage.getItem('theme')
         if (theme) {
             return theme === 'dark' ? true : false
         }
-        return false
+        return prefersDarkMode ? true : false
     }
 
     const [isDarkTheme, setIsDarkTheme] = React.useState(loadTheme())
