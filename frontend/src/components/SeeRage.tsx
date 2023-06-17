@@ -9,6 +9,7 @@ import {
     NivoGraph,
     SurrealGraphQuery,
     SurrealTagFilter,
+    SURREAL_HEADERS,
 } from '../helpers/helpers'
 
 import { Row, createColumnHelper } from '@tanstack/react-table'
@@ -156,12 +157,7 @@ export default function SeeRage() {
     const { data: tagData } = useQuery(['tags'], () =>
         fetch(DATABASE_URL + 'key/tags', {
             method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                Authorization: 'Basic ' + btoa('root:root'),
-                NS: 'test',
-                DB: 'test',
-            },
+            headers: SURREAL_HEADERS,
         })
             .then((res) => res.json())
             .then((res) => {
@@ -178,12 +174,7 @@ export default function SeeRage() {
         queryFn: () =>
             fetch(DATABASE_URL + 'key/complaints', {
                 method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: 'Basic ' + btoa('root:root'),
-                    NS: 'test',
-                    DB: 'test',
-                },
+                headers: SURREAL_HEADERS,
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -199,13 +190,7 @@ export default function SeeRage() {
         queryFn: () =>
             fetch(DATABASE_URL + 'sql', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: 'Basic ' + btoa('root:root'),
-                    NS: 'test',
-                    DB: 'test',
-                },
+                headers: SURREAL_HEADERS,
                 body: surrealQueryForGraph,
             })
                 .then((res) => {
@@ -226,13 +211,7 @@ export default function SeeRage() {
         (postBody: string) =>
             fetch(DATABASE_URL + 'sql', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: 'Basic ' + btoa('root:root'),
-                    NS: 'test',
-                    DB: 'test',
-                },
+                headers: SURREAL_HEADERS,
                 body: postBody,
             }).then((res) => {
                 if (!res.ok) {
@@ -262,13 +241,7 @@ export default function SeeRage() {
         (postBody: string) =>
             fetch(DATABASE_URL + 'key/tags', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: 'Basic ' + btoa('root:root'),
-                    NS: 'test',
-                    DB: 'test',
-                },
+                headers: SURREAL_HEADERS,
                 body: postBody,
             }).then((res) => {
                 if (!res.ok) {

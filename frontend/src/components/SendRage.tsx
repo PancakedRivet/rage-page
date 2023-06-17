@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DATABASE_URL } from '../helpers/helpers'
+import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/helpers'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -46,13 +46,7 @@ export default function SendRage() {
         (postBody: string) =>
             fetch(DATABASE_URL + 'key/complaints', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: 'Basic ' + btoa('root:root'),
-                    NS: 'test',
-                    DB: 'test',
-                },
+                headers: SURREAL_HEADERS,
                 body: postBody,
             }).then((res) => {
                 if (!res.ok) {
