@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/types'
+import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
