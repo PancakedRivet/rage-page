@@ -22,7 +22,7 @@ export function LoginPage() {
     const location = useLocation()
     const auth = useAuth()
 
-    const valueRef = useRef('')
+    const valueRef = useRef<HTMLInputElement>()
 
     const from = location.state?.from?.pathname || '/'
 
@@ -39,7 +39,7 @@ export function LoginPage() {
     }
 
     const handleSubmitLogin = () => {
-        const submittedPassword = valueRef.current.value
+        const submittedPassword = valueRef.current?.value
         if (submittedPassword === import.meta.env.VITE_ADMIN_PASSWORD) {
             auth.signin(() => {
                 // Send them back to the page they tried to visit when they were

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { HTMLProps } from 'react'
 import { ComplaintTableRow } from '../../helpers/helpers'
 import TablePaginationActions from './TablePaginationActions'
 import './table.css'
