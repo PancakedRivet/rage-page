@@ -13,6 +13,8 @@ import {
     Complaint,
 } from '../helpers/helpers'
 
+import NivoLine from './graph/NivoLine'
+
 import { Row, createColumnHelper } from '@tanstack/react-table'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -21,12 +23,18 @@ import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
+import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
-import NivoLine from './graph/NivoLine'
+
+import RefreshIcon from '@mui/icons-material/Refresh'
 
 function getDaysArray(start: Date, end: Date, increment: number) {
     const arr = []
@@ -97,6 +105,8 @@ export default function SeeRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
     const [isShowingGraph, setIsShowingGraph] = useState(false)
+    const [numberOfWeeksToQuery, setNumberOfWeeksToQuery] =
+        useState<string>('1')
 
     const [tableRowToEdit, setTableRowToEdit] = useState<
         Row<ComplaintTableRow> | undefined
@@ -108,7 +118,7 @@ export default function SeeRage() {
     const surrealQueryForGraph = `
     LET $bucket = "day";
     LET $endDateTime = time::group(time::now(), $bucket) + 1d;
-    LET $startDateTime = $endDateTime - 1w;
+    LET $startDateTime = $endDateTime - ${numberOfWeeksToQuery}w;
 
     LET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;
     LET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;
@@ -155,6 +165,14 @@ export default function SeeRage() {
         setSnackbarIsOpen(false)
     }
 
+    const handleChangeTimePeriod = (event: SelectChangeEvent) => {
+        setNumberOfWeeksToQuery(event.target.value)
+    }
+
+    const handleRefreshGraph = () => {
+        graphDataRefetch()
+    }
+
     const { data: tagData } = useQuery(['tags'], () =>
         fetch(DATABASE_URL + 'key/tags', {
             method: 'GET',
@@ -196,7 +214,7 @@ export default function SeeRage() {
         enabled: !!tagData,
     })
 
-    const { data: graphData } = useQuery({
+    const { data: graphData, refetch: graphDataRefetch } = useQuery({
         queryKey: ['graphData'],
         queryFn: () =>
             fetch(DATABASE_URL + 'sql', {
@@ -353,7 +371,49 @@ export default function SeeRage() {
                                 />
                             )}
                             {isShowingGraph && lineData && (
-                                <NivoLine data={lineData} />
+                                <>
+                                    <NivoLine data={lineData} />
+                                    <Box>
+                                        <Stack direction="row" spacing={2}>
+                                            <FormControl>
+                                                <InputLabel id="demo-simple-select-label">
+                                                    Time Period
+                                                </InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={numberOfWeeksToQuery}
+                                                    label="Time Period"
+                                                    onChange={
+                                                        handleChangeTimePeriod
+                                                    }
+                                                >
+                                                    <MenuItem value={1}>
+                                                        Last Week
+                                                    </MenuItem>
+                                                    <MenuItem value={4}>
+                                                        Last Month
+                                                    </MenuItem>
+                                                    <MenuItem value={12}>
+                                                        Last Quarter
+                                                    </MenuItem>
+                                                    {/* <MenuItem value={26}>
+                                                        Last Half Year
+                                                    </MenuItem>
+                                                    <MenuItem value={52}>
+                                                        Last Year
+                                                    </MenuItem> */}
+                                                </Select>
+                                            </FormControl>
+                                            <IconButton
+                                                color="primary"
+                                                onClick={handleRefreshGraph}
+                                            >
+                                                <RefreshIcon />
+                                            </IconButton>
+                                        </Stack>
+                                    </Box>
+                                </>
                             )}
                         </>
                     ) : (
