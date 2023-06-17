@@ -12,6 +12,8 @@ import {
     getPaginationRowModel,
     ColumnDef,
     flexRender,
+    SortingState,
+    getSortedRowModel,
 } from '@tanstack/react-table'
 
 import Box from '@mui/material/Box'
@@ -24,6 +26,7 @@ import TableRow from '@mui/material/TableRow'
 import TablePagination from '@mui/material/TablePagination'
 import InputBase from '@mui/material/InputBase'
 import Paper from '@mui/material/Paper'
+import React from 'react'
 
 type Props<T> = {
     data: T[]
@@ -36,11 +39,17 @@ export default function ReactTable({
     columns,
     showTableState = false,
 }: Props<ComplaintTableRow>) {
+    const [sorting, setSorting] = React.useState<SortingState>([])
     const table = useReactTable({
         data,
         columns,
+        state: {
+            sorting,
+        },
+        onSortingChange: setSorting,
         // Pipeline
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         //
@@ -64,11 +73,29 @@ export default function ReactTable({
                                         >
                                             {header.isPlaceholder ? null : (
                                                 <div>
-                                                    {flexRender(
-                                                        header.column.columnDef
-                                                            .header,
-                                                        header.getContext()
-                                                    )}
+                                                    <div
+                                                        {...{
+                                                            className:
+                                                                header.column.getCanSort()
+                                                                    ? 'cursor-pointer select-none'
+                                                                    : '',
+                                                            onClick:
+                                                                header.column.getToggleSortingHandler(),
+                                                        }}
+                                                    >
+                                                        {flexRender(
+                                                            header.column
+                                                                .columnDef
+                                                                .header,
+                                                            header.getContext()
+                                                        )}
+                                                        {{
+                                                            asc: ' 🔼',
+                                                            desc: ' 🔽',
+                                                        }[
+                                                            header.column.getIsSorted() as string
+                                                        ] ?? null}
+                                                    </div>
                                                     {header.column.getCanFilter() ? (
                                                         <div>
                                                             <Filter
