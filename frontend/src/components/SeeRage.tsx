@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react'
 
-import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
-
 import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
-
-import NivoLine from './graph/NivoLine'
+import { convertSurrealQueryToNivoLine } from '../helpers/functions'
+import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
 
 import { Row } from '@tanstack/react-table'
 
@@ -12,21 +10,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Snackbar from '@mui/material/Snackbar'
 import Stack from '@mui/material/Stack'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
-import RefreshIcon from '@mui/icons-material/Refresh'
-import { convertSurrealQueryToNivoLine } from '../helpers/functions'
-import { NivoPie } from './graph/NivoPie'
 import RageTable from './RageTable'
+import RageGraph from './RageGraph'
 
 export default function SeeRage() {
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
@@ -82,8 +73,8 @@ export default function SeeRage() {
         setSnackbarIsOpen(false)
     }
 
-    const handleChangeTimePeriod = (event: SelectChangeEvent) => {
-        setNumberOfWeeksToQuery(event.target.value)
+    const handleChangeTimePeriod = (newTimePeriod: string) => {
+        setNumberOfWeeksToQuery(newTimePeriod)
     }
 
     const handleRefreshGraph = () => {
@@ -242,59 +233,21 @@ export default function SeeRage() {
                     </Typography>
                     {complaintData && complaintData.length > 0 ? (
                         <>
-                            {!isShowingGraph && (
+                            {isShowingGraph ? (
+                                <RageGraph
+                                    lineData={lineData}
+                                    pieData={pieData}
+                                    numberOfWeeksToQuery={numberOfWeeksToQuery}
+                                    onTimePeriodChange={handleChangeTimePeriod}
+                                    onGraphRefetch={handleRefreshGraph}
+                                />
+                            ) : (
                                 <RageTable
                                     tagData={tagData}
                                     complaintData={complaintData}
                                     onCreateTag={handleCreateTag}
                                     onUpdateTag={handleUpdateTagEdit}
                                 />
-                            )}
-                            {isShowingGraph && lineData && (
-                                <>
-                                    <NivoLine data={lineData} />
-                                    <NivoPie data={pieData} />
-                                    <Box>
-                                        <Stack direction="row" spacing={2}>
-                                            <FormControl>
-                                                <InputLabel id="demo-simple-select-label">
-                                                    Time Period
-                                                </InputLabel>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={numberOfWeeksToQuery}
-                                                    label="Time Period"
-                                                    onChange={
-                                                        handleChangeTimePeriod
-                                                    }
-                                                >
-                                                    <MenuItem value={1}>
-                                                        Last Week
-                                                    </MenuItem>
-                                                    <MenuItem value={4}>
-                                                        Last Month
-                                                    </MenuItem>
-                                                    <MenuItem value={12}>
-                                                        Last Quarter
-                                                    </MenuItem>
-                                                    {/* <MenuItem value={26}>
-                                                        Last Half Year
-                                                    </MenuItem>
-                                                    <MenuItem value={52}>
-                                                        Last Year
-                                                    </MenuItem> */}
-                                                </Select>
-                                            </FormControl>
-                                            <IconButton
-                                                color="primary"
-                                                onClick={handleRefreshGraph}
-                                            >
-                                                <RefreshIcon />
-                                            </IconButton>
-                                        </Stack>
-                                    </Box>
-                                </>
                             )}
                         </>
                     ) : (

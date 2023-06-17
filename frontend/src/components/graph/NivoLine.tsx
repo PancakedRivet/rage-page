@@ -39,7 +39,6 @@ const NivoLine = ({ data }: any) => {
         <div className="nivo">
             <ResponsiveLine
                 data={filteredData}
-                // data={exampleLineData}
                 curve="monotoneX"
                 theme={isDarkMode ? DARK : LIGHT}
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}

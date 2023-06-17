@@ -53,3 +53,5 @@ export const NivoPie = ({ data }: any) => {
         </div>
     )
 }
+
+export default NivoPie
