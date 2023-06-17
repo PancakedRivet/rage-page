@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { LIGHT, DARK } from './theme'
 
 import { ResponsiveLine } from '@nivo/line'
 import { useOrdinalColorScale } from '@nivo/colors'
+import { Datum } from '@nivo/legends/dist/types/types'
 
 import { useTheme } from '@mui/material/styles'
+import { NivoGraph } from '../../helpers/helpers'
 
 const exampleData = [
     {
@@ -320,14 +322,18 @@ const NivoLine = ({ data }: any) => {
     const theme = useTheme()
     const isDarkMode = theme.palette.mode === 'light' ? false : true
 
-    const [hiddenIds, setHiddenIds] = useState([])
-    const [highlightedId, setHighlightedId] = useState(null)
+    const [hiddenIds, setHiddenIds] = useState<string[]>([])
+    const [highlightedId, setHighlightedId] = useState<string | number | null>(
+        null
+    )
     const [filteredData, setFilteredData] = useState([])
 
     const colors = useOrdinalColorScale({ scheme: 'category10' }, 'id')
 
     useEffect(() => {
-        const filteredData = data.filter((item) => !hiddenIds.includes(item.id))
+        const filteredData = data.filter(
+            (item: NivoGraph) => !hiddenIds.includes(item.id)
+        )
         setFilteredData(filteredData)
     }, [data, hiddenIds])
 
@@ -370,11 +376,11 @@ const NivoLine = ({ data }: any) => {
                 pointLabelYOffset={-12}
                 colors={(d) => colors(d)}
                 useMesh={true}
-                enableSlices={false}
+                enableSlices="x"
                 legends={[
                     {
                         anchor: 'bottom-right',
-                        data: data.map((item) => {
+                        data: data.map((item: NivoGraph) => {
                             const color = colors(item)
                             return {
                                 color: hiddenIds.includes(item.id)
@@ -423,11 +429,12 @@ const NivoLine = ({ data }: any) => {
                     'markers',
                     'areas',
                     'mesh',
-                    //'points',
+                    'points',
                     'axes',
                     'legends',
                     'crosshair',
-                    //'lines',
+                    'slices',
+                    // 'lines',
                     ({ series, lineGenerator, xScale, yScale }) =>
                         HighlightLine(
                             { series, lineGenerator, xScale, yScale },
@@ -441,40 +448,12 @@ const NivoLine = ({ data }: any) => {
 
 export default NivoLine
 
-// Component to generate a custom tooltip
-function CustomToolTip(props) {
-    const theme = useTheme()
-    return (
-        <div
-            className={theme.palette.mode + ' popup content'}
-            style={{
-                padding: '9px 12px',
-                border: '1px solid #ccc',
-                textAlign: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-            }}
-        >
-            <span>
-                <span
-                    style={{
-                        display: 'inline-block',
-                        width: '12px',
-                        height: '12px',
-                        background: props.point.serieColor,
-                    }}
-                ></span>{' '}
-                {props.point.serieId}
-            </span>
-            <span>CPU {props.point.data.yFormatted}</span>
-            <span>Time {props.point.data.xFormatted}</span>
-        </div>
-    )
-}
-
 // function to determine whether to show or hide a series clicked on in the legend
-function changeDisplayedSeries(state, datum, graphDataCount) {
+function changeDisplayedSeries(
+    state: string[],
+    datum: Datum,
+    graphDataCount: number
+) {
     let newState = state
     // returns true if the hiddenIds includes datum
     const datumExists = state.includes(String(datum.id))
@@ -498,7 +477,7 @@ function changeDisplayedSeries(state, datum, graphDataCount) {
 
 const HighlightLine = (
     { series, lineGenerator, xScale, yScale },
-    highlightedId
+    highlightedId: string | number | null
 ) => {
     const calculateOpacity = (id) => {
         if (!highlightedId) {
