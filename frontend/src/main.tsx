@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import SendRage from './components/SendRage.tsx'
-import SeeRage from './components/SeeRage.tsx'
+// import SeeRage from './components/SeeRage.tsx'
 import MateriaThemeProvider from './components/contexts/MateriaThemeContext.tsx'
 import './index.css'
 
@@ -11,7 +11,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './components/contexts/AuthContext.tsx'
 import { LoginPage, RequireAuth } from './components/AuthHelpers.tsx'
 
+const SeeRage = lazy(() => import('./components/SeeRage.tsx'))
+
 const queryClient = new QueryClient()
+
+const Loading = () => {
+    return <h2>Loading...</h2>
+}
 
 const router = createBrowserRouter([
     {
@@ -26,7 +32,9 @@ const router = createBrowserRouter([
         path: '/admin',
         element: (
             <RequireAuth>
-                <SeeRage />
+                <Suspense fallback={<Loading />}>
+                    <SeeRage />
+                </Suspense>
             </RequireAuth>
         ),
     },
