@@ -1,6 +1,9 @@
+import React, { useState, useEffect, useMemo } from 'react'
+
 import { LIGHT, DARK } from './theme'
 
 import { ResponsiveLine } from '@nivo/line'
+import { useOrdinalColorScale } from '@nivo/colors'
 
 import { useTheme } from '@mui/material/styles'
 
@@ -316,10 +319,22 @@ const exampleLineData = [
 const NivoLine = ({ data }: any) => {
     const theme = useTheme()
     const isDarkMode = theme.palette.mode === 'light' ? false : true
+
+    const [hiddenIds, setHiddenIds] = useState([])
+    const [highlightedId, setHighlightedId] = useState(null)
+    const [filteredData, setFilteredData] = useState([])
+
+    const colors = useOrdinalColorScale({ scheme: 'category10' }, 'id')
+
+    useEffect(() => {
+        const filteredData = data.filter((item) => !hiddenIds.includes(item.id))
+        setFilteredData(filteredData)
+    }, [data, hiddenIds])
+
     return (
         <div className="nivo">
             <ResponsiveLine
-                data={data}
+                data={filteredData}
                 // data={exampleLineData}
                 theme={isDarkMode ? DARK : LIGHT}
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
@@ -353,13 +368,34 @@ const NivoLine = ({ data }: any) => {
                 pointBorderWidth={2}
                 pointBorderColor={{ from: 'serieColor' }}
                 pointLabelYOffset={-12}
-                colors={{ scheme: 'set1' }}
+                colors={(d) => colors(d)}
                 useMesh={true}
                 enableSlices={false}
                 legends={[
                     {
                         anchor: 'bottom-right',
+                        data: data.map((item) => {
+                            const color = colors(item)
+                            return {
+                                color: hiddenIds.includes(item.id)
+                                    ? 'rgba(1, 1, 1, .1)'
+                                    : color,
+                                id: item.id,
+                                label: item.id,
+                            }
+                        }),
                         direction: 'column',
+                        onClick: (datum) => {
+                            setHiddenIds((state) =>
+                                changeDisplayedSeries(state, datum, data.length)
+                            )
+                        },
+                        onMouseEnter: (datum) => {
+                            setHighlightedId(datum.id)
+                        },
+                        onMouseLeave: () => {
+                            setHighlightedId(null)
+                        },
                         justify: false,
                         translateX: 100,
                         translateY: 0,
@@ -382,9 +418,113 @@ const NivoLine = ({ data }: any) => {
                         ],
                     },
                 ]}
+                layers={[
+                    'grid',
+                    'markers',
+                    'areas',
+                    'mesh',
+                    //'points',
+                    'axes',
+                    'legends',
+                    'crosshair',
+                    //'lines',
+                    ({ series, lineGenerator, xScale, yScale }) =>
+                        HighlightLine(
+                            { series, lineGenerator, xScale, yScale },
+                            highlightedId
+                        ), // Custom lines layer
+                ]}
             />
         </div>
     )
 }
 
 export default NivoLine
+
+// Component to generate a custom tooltip
+function CustomToolTip(props) {
+    const theme = useTheme()
+    return (
+        <div
+            className={theme.palette.mode + ' popup content'}
+            style={{
+                padding: '9px 12px',
+                border: '1px solid #ccc',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+            }}
+        >
+            <span>
+                <span
+                    style={{
+                        display: 'inline-block',
+                        width: '12px',
+                        height: '12px',
+                        background: props.point.serieColor,
+                    }}
+                ></span>{' '}
+                {props.point.serieId}
+            </span>
+            <span>CPU {props.point.data.yFormatted}</span>
+            <span>Time {props.point.data.xFormatted}</span>
+        </div>
+    )
+}
+
+// function to determine whether to show or hide a series clicked on in the legend
+function changeDisplayedSeries(state, datum, graphDataCount) {
+    let newState = state
+    // returns true if the hiddenIds includes datum
+    const datumExists = state.includes(String(datum.id))
+
+    const MINIMUM_GRAPHS_TO_SHOW = 1 // Always keep one graph displayed (Chrome tab crashes when displaying 0 graphs)
+    const futureHiddenIdCount = state.length + MINIMUM_GRAPHS_TO_SHOW
+
+    if (datumExists) {
+        newState = state.filter((item) => item !== datum.id)
+    } else if (!datumExists) {
+        if (futureHiddenIdCount < graphDataCount) {
+            newState = [...state, String(datum.id)]
+        } else {
+            console.warn(
+                'Cannot hide all graphs. Please leave at least one graph selected.'
+            )
+        }
+    }
+    return newState
+}
+
+const HighlightLine = (
+    { series, lineGenerator, xScale, yScale },
+    highlightedId
+) => {
+    const calculateOpacity = (id) => {
+        if (!highlightedId) {
+            return 1
+        }
+        if (id !== highlightedId) {
+            return 0.3
+        }
+        return 1
+    }
+
+    return series.map(({ id, data, color }) => (
+        <path
+            key={id}
+            d={lineGenerator(
+                data.map((d) => ({
+                    x: xScale(d.data.x),
+                    y: yScale(d.data.y),
+                }))
+            )}
+            fill="none"
+            stroke={color}
+            style={{
+                strokeWidth: id === highlightedId ? 4 : 3,
+                strokeOpacity: calculateOpacity(id),
+            }}
+        />
+    ))
+}
