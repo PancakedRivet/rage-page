@@ -12,6 +12,7 @@ services:
               source: ./frontend
               target: /srv/app
         tty: true
+
     surrealdb:
         image: surrealdb/surrealdb:latest
         container_name: surrealdb
@@ -20,8 +21,8 @@ services:
         command:
             - start
             - --log=info
-            - --user=root
-            - --pass=root
+            - --user=${SURREAL_USER}
+            - --pass=${SURREAL_PASS}
             - file:/data/mydatabase.db
         volumes:
             - type: bind
