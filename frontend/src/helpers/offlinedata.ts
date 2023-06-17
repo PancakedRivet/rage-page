@@ -40,7 +40,28 @@ export const surrealData: SurrealGraphQuery[] = [
                     total: 1,
                 },
             ],
-            pie: 'someData',
+            pie: [
+                {
+                    id: 'Adminnistration',
+                    value: 3,
+                },
+                {
+                    id: 'Another Tag',
+                    value: 2,
+                },
+                {
+                    id: 'CloudOps',
+                    value: 1,
+                },
+                {
+                    id: 'Performance',
+                    value: 1,
+                },
+                {
+                    id: 'Time Management',
+                    value: 1,
+                },
+            ],
         },
         metadata: {
             tagList: [

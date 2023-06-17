@@ -29,6 +29,7 @@ import Typography from '@mui/material/Typography'
 
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
+import { NivoPie } from './graph/NivoPie'
 
 export default function SeeRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
@@ -53,11 +54,13 @@ export default function SeeRage() {
     LET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;
     LET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;
     LET $tagList = SELECT tag FROM $complaintTagList;
+
     LET $lineGraphData = SELECT * FROM $complaintTagList;
+    LET $pieGraphData = SELECT count() as value, tags AS id FROM $complaintBucket GROUP BY id;
     LET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;
     LET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };
 
-    SELECT * FROM { graphData: { line: $lineGraphData, pie: "placeholder" }, metadata: { time: $metaTime, tagList: $metaTagList } };`
+    SELECT * FROM { graphData: { line: $lineGraphData, pie: $pieGraphData }, metadata: { time: $metaTime, tagList: $metaTagList } };`
 
     const handleChangeDisplay = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -283,6 +286,13 @@ export default function SeeRage() {
         return null
     }, [graphData])
 
+    const pieData = useMemo(() => {
+        if (graphData) {
+            return graphData.graphData.pie
+        }
+        return null
+    }, [graphData])
+
     return (
         <>
             <Box sx={{ width: '100%' }}>
@@ -302,6 +312,7 @@ export default function SeeRage() {
                             {isShowingGraph && lineData && (
                                 <>
                                     <NivoLine data={lineData} />
+                                    <NivoPie data={pieData} />
                                     <Box>
                                         <Stack direction="row" spacing={2}>
                                             <FormControl>

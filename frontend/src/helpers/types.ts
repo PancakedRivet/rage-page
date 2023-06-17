@@ -46,7 +46,17 @@ export type SurrealTagFilter = {
     total: number
 }
 
+export type SurrealGraphPie = {
+    id: string | null
+    value: number
+}
+
+type SurrealGraphList = {
+    line: SurrealTagFilter[]
+    pie: SurrealGraphPie[]
+}
+
 export type SurrealGraphQuery = {
-    graphData: { line: SurrealTagFilter[]; pie: SurrealTagFilter[] | string }
+    graphData: SurrealGraphList
     metadata: SurrealGraphMetaData
 }
