@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './components/contexts/AuthContext.tsx'
-import { LoginPage, RequireAuth } from './components/AuthHelpers.tsx'
+import { LoginPage, RequireAuth } from './helpers/AuthHelpers.tsx'
 
 const SeeRage = lazy(() => import('./components/SeeRage.tsx'))
 

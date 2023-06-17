@@ -8,7 +8,7 @@ import { useOrdinalColorScale } from '@nivo/colors'
 import { Datum } from '@nivo/legends/dist/types/types'
 
 import { useTheme } from '@mui/material/styles'
-import { NivoGraph } from '../../helpers/helpers'
+import { NivoGraph } from '../../helpers/types'
 
 type Series = {
     id: string | number
@@ -57,6 +57,7 @@ const NivoLine = ({ data }: any) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
+                    // tickValues: 5,
                     legend: 'Tag Count',
                     legendOffset: -40,
                     legendPosition: 'middle',

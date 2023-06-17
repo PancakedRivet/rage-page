@@ -1,18 +1,3 @@
-export const DATABASE_URL = 'http://localhost:9000/'
-
-export const SURREAL_HEADERS = {
-    Accept: 'application/json',
-    Authorization:
-        'Basic ' +
-        btoa(
-            import.meta.env.VITE_SURREAL_USER +
-                ':' +
-                import.meta.env.VITE_SURREAL_PASS
-        ),
-    NS: 'test',
-    DB: 'test',
-}
-
 export type Complaint = {
     id: string
     complaint: string
@@ -62,6 +47,6 @@ export type SurrealTagFilter = {
 }
 
 export type SurrealGraphQuery = {
-    result: SurrealTagFilter[]
+    graphData: { line: SurrealTagFilter[]; pie: SurrealTagFilter[] | string }
     metadata: SurrealGraphMetaData
 }

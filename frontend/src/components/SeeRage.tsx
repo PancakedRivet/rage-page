@@ -2,16 +2,9 @@ import { useMemo, useState } from 'react'
 
 import ReactTable from './table/ReactTable'
 import TagEditDialog from './TagEditDialog'
-import {
-    DATABASE_URL,
-    Tag,
-    ComplaintTableRow,
-    NivoGraph,
-    SurrealGraphQuery,
-    SurrealTagFilter,
-    SURREAL_HEADERS,
-    Complaint,
-} from '../helpers/helpers'
+import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
+
+import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 
 import NivoLine from './graph/NivoLine'
 
@@ -35,71 +28,7 @@ import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
 import RefreshIcon from '@mui/icons-material/Refresh'
-
-function getDaysArray(start: Date, end: Date, increment: number) {
-    const arr = []
-    for (
-        let dt = new Date(start);
-        dt <= new Date(end);
-        dt.setDate(dt.getDate() + increment)
-    ) {
-        arr.push(dt.toDateString())
-    }
-    return arr
-}
-
-function convertSurrealToNivo(surrealQueryData: SurrealGraphQuery) {
-    const lineDataForTag = new Map()
-
-    const daylist = getDaysArray(
-        new Date(surrealQueryData.metadata.time.minDateTime),
-        new Date(surrealQueryData.metadata.time.maxDateTime),
-        1
-    )
-
-    // Intially setting each date to 0 total
-    surrealQueryData.metadata.tagList.map((tag) => {
-        const key = tag.tag ? tag.tag : 'Not tagged'
-
-        const zeroDataMap = new Map()
-
-        daylist.map((date) => {
-            zeroDataMap.set(date, 0)
-        })
-
-        lineDataForTag.set(key, zeroDataMap)
-    })
-
-    // Update the date to reflect the correct totals
-    surrealQueryData.result.map((item: SurrealTagFilter) => {
-        const key = item.tag ? item.tag : 'Not tagged'
-        // Get the map for a specific tag
-        const dataMap = lineDataForTag.get(key)
-
-        // Update the new total for the specific timebucket
-        const dateString = new Date(item.timeBucket)
-        dataMap.set(dateString.toDateString(), item.total)
-
-        // Update the map with the new total (as it was 0 and each item has a unique timeBucket and tag combination
-        lineDataForTag.set(key, dataMap)
-    })
-
-    const returnedDataForNivoLine: NivoGraph[] = []
-
-    // Shape the data into an array for returning
-    lineDataForTag.forEach((dataMap, tagName) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const dataArray = Array.from(dataMap, function (entry: any) {
-            return { x: new Date(entry[0]), y: entry[1] }
-        })
-        returnedDataForNivoLine.push({
-            id: tagName,
-            data: dataArray,
-        })
-    })
-
-    return returnedDataForNivoLine
-}
+import { convertSurrealQueryToNivoLine } from '../helpers/functions'
 
 export default function SeeRage() {
     const [tagEditIsOpen, setTagEditIsOpen] = useState(false)
@@ -124,11 +53,11 @@ export default function SeeRage() {
     LET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;
     LET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;
     LET $tagList = SELECT tag FROM $complaintTagList;
-    LET $result = SELECT * FROM $complaintTagList;
+    LET $lineGraphData = SELECT * FROM $complaintTagList;
     LET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;
     LET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };
 
-    SELECT * FROM { result: $result, metadata: { time: $metaTime, tagList: $metaTagList } };`
+    SELECT * FROM { graphData: { line: $lineGraphData, pie: "placeholder" }, metadata: { time: $metaTime, tagList: $metaTagList } };`
 
     const handleChangeDisplay = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -349,7 +278,7 @@ export default function SeeRage() {
 
     const lineData = useMemo(() => {
         if (graphData) {
-            return convertSurrealToNivo(graphData)
+            return convertSurrealQueryToNivoLine(graphData)
         }
         return null
     }, [graphData])

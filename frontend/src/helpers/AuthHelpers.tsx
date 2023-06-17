@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-import { useAuth } from './contexts/AuthContext'
+import { useAuth } from '../components/contexts/AuthContext'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'

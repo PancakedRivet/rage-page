@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComplaintTableRow } from '../../helpers/helpers'
+import { ComplaintTableRow } from '../../helpers/types'
 import TablePaginationActions from './TablePaginationActions'
 import './table.css'
 
