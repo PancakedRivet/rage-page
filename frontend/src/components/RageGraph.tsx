@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react'
 
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
@@ -7,6 +8,8 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 
 import RefreshIcon from '@mui/icons-material/Refresh'
 
@@ -30,6 +33,15 @@ export default function RageGraph(props: RageGraphProps) {
         onGraphRefetch,
     } = props
 
+    const [tabNumber, setTabNumber] = React.useState(0)
+
+    const handleTabChange = (
+        _event: React.SyntheticEvent,
+        newValue: number
+    ) => {
+        setTabNumber(newValue)
+    }
+
     const handleChangeTimePeriod = (event: SelectChangeEvent) => {
         const newTimePeriod = event.target.value
         onTimePeriodChange(newTimePeriod)
@@ -41,8 +53,12 @@ export default function RageGraph(props: RageGraphProps) {
 
     return (
         <>
-            <NivoLine data={lineData} />
-            <NivoPie data={pieData} />
+            <Tabs value={tabNumber} onChange={handleTabChange} centered>
+                <Tab label="Line" />
+                <Tab label="Pie" />
+            </Tabs>
+            {tabNumber === 0 && <NivoLine data={lineData} />}
+            {tabNumber === 1 && <NivoPie data={pieData} />}
             <Box>
                 <Stack direction="row" spacing={2}>
                     <FormControl>
