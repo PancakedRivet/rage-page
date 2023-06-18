@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import ReactTable from './table/ReactTable'
 import TagEditDialog from './TagEditDialog'
-import { Tag, ComplaintTableRow } from '../helpers/types'
+import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
 
 import { Row, createColumnHelper } from '@tanstack/react-table'
 
@@ -12,8 +12,8 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
 interface RageTableProps {
-    tagData: any
-    complaintData: any
+    tagData: Tag[]
+    complaintData: Complaint[]
     onCreateTag: (newTagName: string) => void
     onUpdateTag: (
         selectedTags: Tag[],

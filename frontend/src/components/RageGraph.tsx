@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import IconButton from '@mui/material/IconButton'
