@@ -100,7 +100,7 @@ export const LIGHT = {
 }
 
 export const DARK = {
-    background: '#2f313c',
+    background: '#121212', // taken from the Materia dark theme background color
     textColor: '#ffffff',
     fontSize: 11,
     axis: {
