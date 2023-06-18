@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Suspense, lazy, useMemo, useState } from 'react'
 
 import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
@@ -17,7 +17,13 @@ import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
 import RageTable from './RageTable'
-import RageGraph from './RageGraph'
+
+const RageGraph = lazy(() => import('./RageGraph'))
+
+// A simple laoding page while the admin page is loaded
+const Loading = () => {
+    return <h2>Loading...</h2>
+}
 
 export default function SeeRage() {
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
@@ -234,13 +240,19 @@ export default function SeeRage() {
                     {complaintData && complaintData.length > 0 ? (
                         <>
                             {isShowingGraph ? (
-                                <RageGraph
-                                    lineData={lineData}
-                                    pieData={pieData}
-                                    numberOfWeeksToQuery={numberOfWeeksToQuery}
-                                    onTimePeriodChange={handleChangeTimePeriod}
-                                    onGraphRefetch={handleRefreshGraph}
-                                />
+                                <Suspense fallback={<Loading />}>
+                                    <RageGraph
+                                        lineData={lineData}
+                                        pieData={pieData}
+                                        numberOfWeeksToQuery={
+                                            numberOfWeeksToQuery
+                                        }
+                                        onTimePeriodChange={
+                                            handleChangeTimePeriod
+                                        }
+                                        onGraphRefetch={handleRefreshGraph}
+                                    />
+                                </Suspense>
                             ) : (
                                 <RageTable
                                     tagData={tagData}
