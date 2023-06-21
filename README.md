@@ -4,6 +4,8 @@ _What better way to gauge what enrages people at work, than by putting it into a
 
 ## Overview
 
+_This project was inspired by [Peter Seibel and his discussion on Engineering Enablement](https://open.spotify.com/episode/3w37eVMog8fGcJFzKtI8eM?si=7298fd90e1e7408d)._
+
 This is a project designed to be able to easily collect data on the less savoury parts of working at a given place. This kind of data is often missed in other survey type collections, as survey questions are often on how you relate to matters above you in management, but less often how you relate to matters horizontally in an organisation.
 
 A common survey question may be: _"Do you feel like you can have open discussions with your boss?"_ but when is the last time you were asked a survey question about _"How much time do you spend trying to find documentation each week?"_
