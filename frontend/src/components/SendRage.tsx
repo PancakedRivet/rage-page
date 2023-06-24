@@ -87,7 +87,6 @@ export default function SendRage() {
                     <form ref={formRef}>
                         <TextField
                             fullWidth
-                            label={"I'm so annoyed by..."}
                             id="fullWidth"
                             multiline
                             maxRows={4}
