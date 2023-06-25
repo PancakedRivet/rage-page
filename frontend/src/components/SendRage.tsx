@@ -15,6 +15,36 @@ import SendIcon from '@mui/icons-material/Send'
 
 import { useMutation } from '@tanstack/react-query'
 
+import { Surreal } from 'surrealdb.js'
+
+const connectionString = 'http://localhost:9000/rpc'
+
+const db = new Surreal(connectionString, {
+    // Set the namespace and database for the connection
+    ns: 'test',
+    db: 'test',
+
+    // Set the authentication details for the connection
+    auth: {
+        // NS: 'test',
+        // DB: 'test',
+        // SC: 'root',
+        user: import.meta.env.VITE_SURREAL_USER,
+        pass: import.meta.env.VITE_SURREAL_PASS,
+        // user: 'root',
+        // pass: 'root',
+    },
+})
+
+async function selectTest() {
+    try {
+        const tags = await db.select('tags')
+        return tags
+    } catch (e) {
+        console.error('ERROR', e)
+    }
+}
+
 export default function SendRage() {
     const formRef = React.useRef<HTMLFormElement>(null)
 
@@ -71,6 +101,9 @@ export default function SendRage() {
             },
         }
     )
+
+    const tags = selectTest()
+    console.log('tags', tags)
 
     return (
         <>
