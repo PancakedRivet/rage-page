@@ -1,3 +1,9 @@
+export type NewComplaint = {
+    complaint: string
+    submissionTime: Date
+    tags: string[]
+}
+
 export type Complaint = {
     id: string
     complaint: string
