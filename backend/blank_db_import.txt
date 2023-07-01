@@ -27,7 +27,7 @@ WHERE $auth.user = 'admin',
     FOR create FULL;
 DEFINE FIELD complaint ON complaints TYPE string ASSERT $value != NONE;
 DEFINE FIELD submissionTime ON complaints TYPE datetime ASSERT $value != NONE;
-DEFINE FIELD tags ON complaints TYPE array;
+DEFINE FIELD tags ON complaints FLEXIBLE TYPE array;
 -- ------------------------------
 -- TABLE: tags
 -- ------------------------------
