@@ -97,46 +97,28 @@ export default function SeeRage() {
         graphDataRefetch()
     }
 
-    const { data: tagData } = useQuery(['tags'], () =>
-        fetch(DATABASE_URL + 'key/tags', {
-            method: 'GET',
-            headers: SURREAL_HEADERS,
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                // Sorting the tags based on the name
-                const sortedTags = res[0].result.sort((tag1: Tag, tag2: Tag) =>
-                    tag1.name > tag2.name ? 1 : tag1.name < tag2.name ? -1 : 0
-                )
-                return sortedTags
-            })
+    const { data: tagData }: { data: Tag[] | undefined } = useQuery(
+        ['tags'],
+        async () => {
+            const result = await db.query(
+                'SELECT * FROM tags ORDER BY name ASC'
+            )
+            return result[0].result
+        }
     )
 
-    const { data: complaintData } = useQuery({
-        queryKey: ['complaints'],
-        queryFn: () =>
-            fetch(DATABASE_URL + 'key/complaints', {
-                method: 'GET',
-                headers: SURREAL_HEADERS,
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    // Only save the object that contains the results we want.
-                    // There is only one item in the array
-                    const sortedComplaints = res[0].result.sort(
-                        (complaint1: Complaint, complaint2: Complaint) =>
-                            new Date(complaint1.submissionTime) <
-                            new Date(complaint2.submissionTime)
-                                ? 1
-                                : new Date(complaint1.submissionTime) >
-                                  new Date(complaint2.submissionTime)
-                                ? -1
-                                : 0
-                    )
-                    return sortedComplaints
-                }),
-        enabled: !!tagData,
-    })
+    const { data: complaintData }: { data: Complaint[] | undefined } = useQuery(
+        {
+            queryKey: ['complaints'],
+            queryFn: async () => {
+                const result = await db.query(
+                    'SELECT * FROM complaints ORDER BY submissionTime DESC'
+                )
+                return result[0].result
+            },
+            enabled: !!tagData,
+        }
+    )
 
     const { data: graphData, refetch: graphDataRefetch } = useQuery({
         queryKey: ['graphData'],

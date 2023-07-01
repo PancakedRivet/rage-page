@@ -12,8 +12,8 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
 interface RageTableProps {
-    tagData: Tag[]
-    complaintData: Complaint[]
+    tagData: Tag[] | undefined
+    complaintData: Complaint[] | undefined
     onCreateTag: (newTagName: string) => void
     onUpdateTag: (
         selectedTags: Tag[],
