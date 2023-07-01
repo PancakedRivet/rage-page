@@ -1,42 +1,42 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-17T22:09:59.517Z",
+    "dateExported": "2023-07-01T04:03:42.576Z",
     "version": "1.1",
     "folders": [
         {
-            "_id": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Complaints",
             "containerId": "",
-            "created": "2023-06-17T21:22:22.567Z",
+            "created": "2023-06-18T01:07:14.805Z",
             "sortNum": 10000
         },
         {
-            "_id": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Tags",
             "containerId": "",
-            "created": "2023-06-17T21:22:22.568Z",
+            "created": "2023-06-18T01:07:14.806Z",
             "sortNum": 12500
         },
         {
-            "_id": "c61937f7-e476-4978-b690-34dd0337df84",
+            "_id": "cc343b0b-5b2b-4832-a6e6-766ef0572f67",
             "name": "Surreal Queries",
             "containerId": "",
-            "created": "2023-06-17T21:22:22.569Z",
+            "created": "2023-06-18T01:07:14.807Z",
             "sortNum": 20000
         }
     ],
     "requests": [
         {
-            "_id": "5c7a54c4-4cb1-4ea0-9766-d8c8cbdecc0c",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "26567b45-5449-49db-8f95-eabb2a2c188a",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Get Complaints",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2023-06-17T21:22:22.567Z",
-            "modified": "2023-06-17T21:22:22.567Z",
+            "created": "2023-06-18T01:07:14.805Z",
+            "modified": "2023-06-18T01:07:14.805Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -62,15 +62,15 @@
             "tests": []
         },
         {
-            "_id": "f1a4d26b-8f51-47df-b544-a1729bf7ff27",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "8fbc958e-d034-49b4-bc18-209bae3029c6",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Get Tags",
             "url": "http://127.0.0.1:9000/key/tags",
             "method": "GET",
             "sortNum": 10000,
-            "created": "2023-06-17T21:22:22.568Z",
-            "modified": "2023-06-17T21:22:22.568Z",
+            "created": "2023-06-18T01:07:14.806Z",
+            "modified": "2023-06-18T01:07:14.806Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -96,15 +96,15 @@
             "tests": []
         },
         {
-            "_id": "6bc25385-aa76-4cc8-a64d-bd8ee91d6348",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c61937f7-e476-4978-b690-34dd0337df84",
+            "_id": "9503dcef-8156-4444-aa33-4e41a42457b9",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "cc343b0b-5b2b-4832-a6e6-766ef0572f67",
             "name": "Update Complaint",
             "url": "http://127.0.0.1:9000/sql",
             "method": "POST",
             "sortNum": 10000,
-            "created": "2023-06-17T21:22:22.569Z",
-            "modified": "2023-06-17T21:22:22.569Z",
+            "created": "2023-06-18T01:07:14.807Z",
+            "modified": "2023-07-01T02:57:29.925Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -122,7 +122,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "UPDATE complaints:0o14dl9jaj26qu95p4t9\nSET tags = [\n    tags:nqjuqymico3236bwweb1\n];\n#SET submissionTime = \"2023-06-13T01:20:46.267Z\";",
+                "raw": "UPDATE complaints:3wc5lus13fhi48w97flp\nSET tags = [\n    --tags:1gv1sk9d79wsjrsiqzie,\n    --tags:k6m47a4hiskngctxqafv\n\"1234\"\n];\n#SET submissionTime = \"2023-06-13T01:20:46.267Z\";",
                 "form": []
             },
             "auth": {
@@ -135,15 +135,15 @@
             "tests": []
         },
         {
-            "_id": "0af5dcc0-d384-4da2-8258-f8f094a131bb",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
+            "_id": "d752c201-0f8f-41cf-b71e-0308a4193182",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
             "containerId": "",
             "name": "Get Version",
             "url": "http://127.0.0.1:9000/version",
             "method": "GET",
             "sortNum": 15000,
-            "created": "2023-06-17T21:22:22.570Z",
-            "modified": "2023-06-17T21:22:22.570Z",
+            "created": "2023-06-18T01:07:14.808Z",
+            "modified": "2023-06-18T01:07:14.808Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -169,15 +169,54 @@
             "tests": []
         },
         {
-            "_id": "4fd1225d-8916-4537-9cdf-b826a501e491",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "a53bf215-a95b-442d-be71-a1ab967f2c13",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "",
+            "name": "Create Users",
+            "url": "http://127.0.0.1:9000/sql",
+            "method": "POST",
+            "sortNum": 17500,
+            "created": "2023-07-01T00:31:13.942Z",
+            "modified": "2023-07-01T04:03:34.739Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "LET $admin_password = \"REPLACE_ME\";\n\nCREATE users:basic SET user = 'basic';\nCREATE users:admin SET user = 'admin', pass = crypto::argon2::generate($admin_password);",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "dac159c0-aec4-4595-912f-75efea9c410e",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Create Complaint",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2023-06-17T21:22:22.571Z",
-            "modified": "2023-06-17T21:22:22.571Z",
+            "created": "2023-06-18T01:07:14.809Z",
+            "modified": "2023-06-18T01:07:14.809Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -208,15 +247,15 @@
             "tests": []
         },
         {
-            "_id": "21968e1d-239c-49b4-a2cd-c4837766a51a",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "5c557629-831e-406b-8517-96adc3dfdd0c",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Create Tag",
             "url": "http://127.0.0.1:9000/key/tags/{id}",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2023-06-17T21:22:22.572Z",
-            "modified": "2023-06-17T21:22:22.572Z",
+            "created": "2023-06-18T01:07:14.810Z",
+            "modified": "2023-06-18T01:07:14.810Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -253,15 +292,15 @@
             "tests": []
         },
         {
-            "_id": "0d82ac9d-9a24-4021-8486-c6a9d8b002bf",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c61937f7-e476-4978-b690-34dd0337df84",
+            "_id": "585a09c9-cc85-4774-bfbe-2c83ce22dcea",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "cc343b0b-5b2b-4832-a6e6-766ef0572f67",
             "name": "Filter Complaints by Tag",
             "url": "http://127.0.0.1:9000/sql",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2023-06-17T21:22:22.573Z",
-            "modified": "2023-06-17T21:22:22.573Z",
+            "created": "2023-06-18T01:07:14.811Z",
+            "modified": "2023-06-18T01:07:14.811Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -292,15 +331,88 @@
             "tests": []
         },
         {
-            "_id": "cb843c17-31b8-4381-b21b-d7254508a8c0",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
+            "_id": "03abfdcd-a001-4435-8c40-ab52e5d60183",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "",
+            "name": "Export SQL",
+            "url": "http://127.0.0.1:9000/export",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-06-30T21:55:47.234Z",
+            "modified": "2023-07-01T04:03:01.314Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "fab365ef-4aa0-47ad-adb4-4673b43924b4",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "",
+            "name": "Import SQL",
+            "url": "http://127.0.0.1:9000/import",
+            "method": "POST",
+            "sortNum": 22500,
+            "created": "2023-06-30T21:57:04.554Z",
+            "modified": "2023-07-01T04:03:18.258Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test2"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "-- ------------------------------\n-- OPTION\n-- ------------------------------\n\nOPTION IMPORT;\n\n-- ------------------------------\n-- SCOPES\n-- ------------------------------\n\nDEFINE SCOPE admin SESSION 12h SIGNIN (SELECT * FROM users WHERE user = 'admin' AND crypto::argon2::compare(pass, $pass));\nDEFINE SCOPE basic SESSION 1d SIGNIN (SELECT * FROM users WHERE user = 'basic');\n\n-- ------------------------------\n-- TABLE: complaints\n-- ------------------------------\n\nDEFINE TABLE complaints SCHEMAFULL PERMISSIONS FOR select, update, delete WHERE $auth.user = 'admin', FOR create FULL;\n\nDEFINE FIELD complaint ON complaints TYPE string ASSERT $value != NONE;\nDEFINE FIELD submissionTime ON complaints TYPE datetime ASSERT $value != NONE;\nDEFINE FIELD tags ON complaints FLEXIBLE TYPE array;\n\n-- ------------------------------\n-- TABLE: tags\n-- ------------------------------\n\nDEFINE TABLE tags SCHEMAFULL PERMISSIONS FOR select, create, update, delete WHERE $auth.user = 'admin';\n\nDEFINE FIELD ispublic ON tags TYPE bool;\nDEFINE FIELD name ON tags TYPE string ASSERT $value != NONE;\n\nDEFINE INDEX idx_tag ON tags FIELDS name UNIQUE;\n\n-- ------------------------------\n-- TABLE: users\n-- ------------------------------\n\nDEFINE TABLE users SCHEMAFULL PERMISSIONS FOR select, update WHERE id = $auth.id, FOR create, delete NONE;\n\nDEFINE FIELD pass ON users TYPE string;\nDEFINE FIELD user ON users TYPE string;\n\nDEFINE INDEX idx_user ON users FIELDS user UNIQUE;\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nBEGIN TRANSACTION;\n\n-- ------------------------------\n-- TABLE DATA: complaints\n-- ------------------------------\n\nUPDATE complaints:3wc5lus13fhi48w97flp CONTENT { complaint: 'life in general', id: complaints:3wc5lus13fhi48w97flp, submissionTime: '2023-06-30T23:39:58.933Z', tags: [tags:1gv1sk9d79wsjrsiqzie, tags:k6m47a4hiskngctxqafv] };\nUPDATE complaints:6psuyk55vjxarrkah5ky CONTENT { complaint: 'Slow processing time', id: complaints:6psuyk55vjxarrkah5ky, submissionTime: '2023-06-30T23:29:13.960Z', tags: [tags:ln9vr2xv2bjx35ufi9fl] };\nUPDATE complaints:meab49f9o9j4n82vj03l CONTENT { complaint: 'Does this work?', id: complaints:meab49f9o9j4n82vj03l, submissionTime: '2023-06-30T23:28:40.078Z', tags: [] };\nUPDATE complaints:vmn8is7mziqgld8legc6 CONTENT { complaint: 'Windows Containers', id: complaints:vmn8is7mziqgld8legc6, submissionTime: '2023-06-30T23:29:05.260Z', tags: [tags:k6m47a4hiskngctxqafv, tags:q8qrrh58sdbmmf67ubml] };\n\n-- ------------------------------\n-- TABLE DATA: tags\n-- ------------------------------\n\nUPDATE tags:1gv1sk9d79wsjrsiqzie CONTENT { id: tags:1gv1sk9d79wsjrsiqzie, name: 'New Tag' };\nUPDATE tags:ffukg91l1geu730o5kwx CONTENT { id: tags:ffukg91l1geu730o5kwx, name: 'Test Tag 1' };\nUPDATE tags:k6m47a4hiskngctxqafv CONTENT { id: tags:k6m47a4hiskngctxqafv, name: 'New Tag 2' };\nUPDATE tags:legl6xik0tml12c0160v CONTENT { id: tags:legl6xik0tml12c0160v, name: 'New Tag 3' };\nUPDATE tags:ln9vr2xv2bjx35ufi9fl CONTENT { id: tags:ln9vr2xv2bjx35ufi9fl, name: 'Test 1' };\nUPDATE tags:q8qrrh58sdbmmf67ubml CONTENT { id: tags:q8qrrh58sdbmmf67ubml, name: 'Performance' };\n\n-- ------------------------------\n-- TABLE DATA: users\n-- ------------------------------\n\nUPDATE users:admin CONTENT { id: users:admin, pass: crypto::argon2::generate('REPLACE_ME'), user: 'admin' };\nUPDATE users:basic CONTENT { id: users:basic, user: 'basic' };\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nCOMMIT TRANSACTION;",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "50cfd8e5-6344-40f2-8e4f-05ee1ac9edbd",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
             "containerId": "",
             "name": "Random Surreal Queries",
             "url": "http://127.0.0.1:9000/sql",
             "method": "POST",
             "sortNum": 25000,
-            "created": "2023-06-17T21:22:22.574Z",
-            "modified": "2023-06-17T21:22:22.574Z",
+            "created": "2023-06-18T01:07:14.812Z",
+            "modified": "2023-06-30T22:18:25.147Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -318,7 +430,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\n#SELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n\nSELECT * FROM tags;\nSELECT id, name FROM tags WHERE name INSIDE \"Test\";\nSELECT id, name FROM tags WHERE tags CONTAINSANY \"Test\";\n\n// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n#LET $complaintsInDateRange = SELECT *, tags.name as tags, time::group(submissionTime, $bucket) AS timeBucket FROM $complaintDateRange, tags WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;",
+                "raw": "// Create a new complaint to use an existing tag\n#CREATE complaints:testcomplaint SET tags = [tags:pljp4w8hqifnr6v9ifpp];\n\n// Setting an existing complaint to use an existing tag\n#UPDATE complaints:7hqa164i6vh1fq1crguk SET tags = [tags:nqjuqymico3236bwweb1];\n\n// Query for the tags used by each complaint\n#SELECT tags FROM complaints;\n\n// Query for the tag names used by each complaint\n#SELECT tags.tag FROM complaints;\n\n// Query for complaints with a specific tag (returns tag IDs)\n#SELECT * FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n// Query for complaints with a specific tag (returns tag names)\n#SELECT *, tags.name AS tags FROM complaints WHERE tags.name CONTAINS \"Test Tag\";\n\nSELECT * FROM tags;\nSELECT id, name FROM tags WHERE name INSIDE \"Test\";\nSELECT id, name FROM tags WHERE tags CONTAINSANY \"Test\";\n\n// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket);\nLET $startDateTime = $endDateTime - 1w;\n#LET $complaintsInDateRange = SELECT *, tags.name as tags, time::group(submissionTime, $bucket) AS timeBucket FROM $complaintDateRange, tags WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\nDELETE user;\n\nDEFINE TABLE users SCHEMAFULL PERMISSIONS FOR select, update WHERE id = $auth.id, FOR create, delete NONE;\n\nDEFINE FIELD pass ON users TYPE string;\nDEFINE FIELD user ON users TYPE string;\n\nDEFINE INDEX idx_user ON users FIELDS user UNIQUE;",
                 "form": []
             },
             "auth": {
@@ -331,15 +443,15 @@
             "tests": []
         },
         {
-            "_id": "77ef7927-6d63-49f0-bb82-7fa778d0b255",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "5ea79d36-4f0e-400f-a55e-740f23cb993e",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Update Complaint",
             "url": "http://127.0.0.1:9000/key/complaints/{id}",
             "method": "PUT",
             "sortNum": 30000,
-            "created": "2023-06-17T21:22:22.575Z",
-            "modified": "2023-06-17T21:22:22.575Z",
+            "created": "2023-06-18T01:07:14.813Z",
+            "modified": "2023-06-18T01:07:14.813Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -376,15 +488,15 @@
             "tests": []
         },
         {
-            "_id": "4530ccf9-097a-4a69-b6be-a71d6f032070",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "98746c6b-4f8f-4a1a-9853-2540352ec62c",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Update Tag",
             "url": "http://127.0.0.1:9000/key/tags/{id}",
             "method": "PUT",
             "sortNum": 30000,
-            "created": "2023-06-17T21:22:22.576Z",
-            "modified": "2023-06-17T21:22:22.576Z",
+            "created": "2023-06-18T01:07:14.814Z",
+            "modified": "2023-06-18T01:07:14.814Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -421,15 +533,15 @@
             "tests": []
         },
         {
-            "_id": "d952d9f5-0be3-4f6a-9066-6192fb44e3dd",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c61937f7-e476-4978-b690-34dd0337df84",
+            "_id": "eda5c591-d472-4fc9-b00d-181bb9a69829",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "cc343b0b-5b2b-4832-a6e6-766ef0572f67",
             "name": "Group Complaints into Time Bucket",
             "url": "http://127.0.0.1:9000/sql",
             "method": "POST",
             "sortNum": 30000,
-            "created": "2023-06-17T21:22:22.577Z",
-            "modified": "2023-06-17T22:09:42.238Z",
+            "created": "2023-06-18T01:07:14.815Z",
+            "modified": "2023-06-18T01:13:12.096Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -447,7 +559,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket) + 1d;\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $lineGraphData= SELECT * FROM $complaintTagList;\n// Return the totals of each tag\nLET $pieGraphData = SELECT count() as value, tags AS id FROM $complaintBucket GROUP BY id;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\n// Return the combined result object\nSELECT * FROM { graphData: { line: $lineGraphData, pie: $pieGraphData }, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
+                "raw": "// Setting the bucket (e.g. \"day\", \"month\")\nLET $bucket = \"day\";\n\nLET $endDateTime = time::group(time::now(), $bucket) + 1d;\nLET $startDateTime = $endDateTime - 1w;\n\n// Select the complaints from between the specified dates\nLET $complaintDateRange = SELECT * FROM complaints WHERE submissionTime > $startDateTime AND submissionTime < $endDateTime;\n\n// Perform groupings required to make the final result return\nLET $complaintBucket = SELECT *, time::group(submissionTime, $bucket) AS timeBucket, tags.name as tags FROM $complaintDateRange SPLIT tags;\nLET $complaintTagList = SELECT count() as total, timeBucket, tags AS tag FROM $complaintBucket GROUP BY timeBucket, tag;\nLET $tagList = SELECT tag FROM $complaintTagList;\n\n// Return the list of filterred tags\nLET $lineGraphData= SELECT * FROM $complaintTagList;\n// Return the totals of each tag\nLET $pieGraphData = SELECT count() as value, tags AS id FROM $complaintBucket GROUP BY id;\n// Return a list of unique tags from the group\nLET $metaTagList = SELECT tag FROM array::distinct($tagList) ORDER BY tag DESC;\n// Return the max and minimum date bucket from the list with the timeperiod\nLET $metaTime = SELECT * FROM { timePeriod: $bucket, minDateTime: $startDateTime, maxDateTime: $endDateTime };\n\nSELECT * FROM $complaintBucket;\n\n// Return the combined result object\nSELECT * FROM { graphData: { line: $lineGraphData, pie: $pieGraphData }, metadata: { time: $metaTime, tagList: $metaTagList } };\n",
                 "form": []
             },
             "auth": {
@@ -460,15 +572,15 @@
             "tests": []
         },
         {
-            "_id": "654a59b6-1ce7-4d78-84c4-e6c4697e5d2d",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "b9f404ee-6cd4-404d-ab8f-d46321acbc0b",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Merge Complaint Change",
             "url": "http://127.0.0.1:9000/key/complaints/{id}",
             "method": "PATCH",
             "sortNum": 32500,
-            "created": "2023-06-17T21:22:22.578Z",
-            "modified": "2023-06-17T21:22:22.578Z",
+            "created": "2023-06-18T01:07:14.816Z",
+            "modified": "2023-06-18T01:07:14.816Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -505,15 +617,15 @@
             "tests": []
         },
         {
-            "_id": "657eb36f-85ab-4e80-bdcb-66ad9cdaaef3",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "40d227de-fb91-40aa-9d65-9ead716fe2c5",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Delete One Complaint",
             "url": "http://127.0.0.1:9000/key/complaints/{id}",
             "method": "DELETE",
             "sortNum": 35000,
-            "created": "2023-06-17T21:22:22.579Z",
-            "modified": "2023-06-17T21:22:22.579Z",
+            "created": "2023-06-18T01:07:14.817Z",
+            "modified": "2023-06-18T01:07:14.817Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -545,15 +657,15 @@
             "tests": []
         },
         {
-            "_id": "bb8325b2-c812-4ba6-94ad-653fef822981",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "c541feaa-343c-4d5b-8197-6aa6c9843c66",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Delete One Tag",
             "url": "http://127.0.0.1:9000/key/tags/{id}",
             "method": "DELETE",
             "sortNum": 35000,
-            "created": "2023-06-17T21:22:22.580Z",
-            "modified": "2023-06-17T21:22:22.580Z",
+            "created": "2023-06-18T01:07:14.818Z",
+            "modified": "2023-06-18T01:07:14.818Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -591,15 +703,15 @@
             "tests": []
         },
         {
-            "_id": "790e0602-8b98-4388-a164-905dbcea8c00",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "c9f59af5-c507-478f-af11-d6a517429a0a",
+            "_id": "644bb600-8186-47f7-9e43-19ab50ca6c58",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "c1dac6ae-dc7f-4a48-9fba-c62857dd9ada",
             "name": "Delete All Complaints",
             "url": "http://127.0.0.1:9000/key/complaints",
             "method": "DELETE",
             "sortNum": 40000,
-            "created": "2023-06-17T21:22:22.581Z",
-            "modified": "2023-06-17T21:22:22.581Z",
+            "created": "2023-06-18T01:07:14.819Z",
+            "modified": "2023-06-18T01:07:14.819Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -625,15 +737,15 @@
             "tests": []
         },
         {
-            "_id": "240ac1f8-5bce-4ad1-bb46-802c151a4e11",
-            "colId": "7b551422-d43e-4d42-869a-cb91cb4be9f5",
-            "containerId": "932c50bf-456b-4b59-be16-afe77bd50661",
+            "_id": "8f380392-1476-4b55-bbde-3bd40b076191",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "551353ec-c6ba-4512-9dfe-c09552a7787b",
             "name": "Delete All Tags",
             "url": "http://127.0.0.1:9000/key/tags",
             "method": "DELETE",
             "sortNum": 40000,
-            "created": "2023-06-17T21:22:22.582Z",
-            "modified": "2023-06-17T21:22:22.582Z",
+            "created": "2023-06-18T01:07:14.820Z",
+            "modified": "2023-06-18T01:07:14.820Z",
             "headers": [
                 {
                     "name": "Accept",

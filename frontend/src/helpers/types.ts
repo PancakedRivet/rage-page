@@ -1,3 +1,9 @@
+export type NewComplaint = {
+    complaint: string
+    submissionTime: Date
+    tags: string[]
+}
+
 export type Complaint = {
     id: string
     complaint: string
@@ -11,6 +17,11 @@ type NonDataTableRow = {
 }
 
 export type ComplaintTableRow = Complaint & NonDataTableRow
+
+export type NewTag = {
+    name: string
+    isPublic: boolean
+}
 
 export type Tag = {
     id: string

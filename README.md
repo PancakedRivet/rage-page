@@ -48,14 +48,17 @@ It makes it easy to **prioritise what's important**. Reducing the guesswork in "
 First time setup:
 
 1. Clone this repo
-1. Create a `.env` file. This should be placed in the root folder at the same level as `docker-compose.ymnl`. This file is used to track secrets required throughout the frontend and stop them from being hard-coded. There are 3 lines that should go into this file (replace `< SECRET_n >` with a value of your choosing):
-    - `VITE_ADMIN_PASSWORD=< SECRET_1 >` - Used as the admin password people need to enter to be able to tag and graph complaints.
-    - `VITE_SURREAL_USER=< SECRET_2 >` - Used as the username for making requests to the surrealdb backend.
-    - `VITE_SURREAL_PASS=< SECRET_3 >` - Used as the password for making requests to the surrealdb backend.
-1. Create a `.env.local` file. This should be placed in the _frontend_ folder at the same level as `index.html`. This file is used to pass values to the SurrealDB container as authentication on startup. There are 2 lines that should go into this file (replace `< SECRET_n >` with a value of your choosing):
-    - `SURREAL_USER=< SECRET_2 >` - Used as the username for making requests to the surrealdb backend. (Make sure it's the same as `VITE_SURREAL_USER`)
-    - `SURREAL_PASS=< SECRET_3 >` - Used as the password for making requests to the surrealdb backend. (Make sure it's the same as `VITE_SURREAL_PASS`)
+1. Create a `.env` file. This should be placed in the root folder at the same level as `docker-compose.ymnl`. This file is used to pass values to the SurrealDB container as authentication on startup. There are 2 lines that should go into this file (replace `< SECRET_n >` with a value of your choosing):
+    - `SURREAL_USER_ROOT=< SECRET_1 >` - Used as the username for starting the surrealdb backend as root.
+    - `SURREAL_PASS_ROOT=< SECRET_2 >` - Used as the password for starting the surrealdb backend as root.
+1. Create a `.env.local` file. This should be placed in the _frontend_ folder at the same level as `index.html`. This file is used to track secrets required throughout the frontend and stop them from being hard-coded. There are 3 lines that should go into this file (replace `< SECRET_n >` with a value of your choosing):
+    - `VITE_ADMIN_PASSWORD=< SECRET_3 >` - Used as the admin password people need to enter to be able to tag and graph complaints.
+    - `VITE_SURREAL_NAMESPACE=< VALUS_1 >` - Used as the namespace for the database. This does not need to be secret. E.g. 'test' or 'namespace1' are fine.
+    - `VITE_SURREAL_DATABASE=< VALUS_2 >` - Used as the database name. This does not need to be secret. E.g. 'test' or 'database1' are fine.
 1. Run `make first` to create the containers and install dependencies.
+1. Import the basic schema for the tables and user scopes. This can be done using their [CLI tool to import from file](https://surrealdb.com/docs/cli/import) or making a [web request against the REST endpoint](https://surrealdb.com/docs/integration/http#import). (The import file contains a list of SQL queries to be made).
+    - **Note** The admin password must be changed in `import.surql` file. This will need to match the value set as the _VITE_ADMIN_PASSWORD_ above or the requests on the admin page will not work. On line 62 of `import.surql`: `crypto::argon2::generate('REPLACE_ME')`, replace _REPLACE_ME_ with the value of _VITE_ADMIN_PASSWORD_ before running the import.
+    - There is also a ThunderClient collection which includes a pre-populated import request, or a request to specifically make the users. These can be used (through ThunderClient in VSCode or adjusting them to suit another client) and have the requests run that way. Both releavant requests will still need to have the value for the admin password replaced.
 
 Doing development:
 

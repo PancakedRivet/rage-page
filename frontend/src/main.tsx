@@ -15,11 +15,6 @@ const SeeRage = lazy(() => import('./components/SeeRage.tsx'))
 
 const queryClient = new QueryClient()
 
-// A simple laoding page while the admin page is loaded
-const Loading = () => {
-    return <h2>Loading...</h2>
-}
-
 const router = createBrowserRouter([
     {
         path: '/',
@@ -33,7 +28,7 @@ const router = createBrowserRouter([
         path: '/admin',
         element: (
             <RequireAuth>
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<h2>Loading...</h2>}>
                     <SeeRage />
                 </Suspense>
             </RequireAuth>

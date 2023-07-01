@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
-
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -13,7 +11,24 @@ import Typography from '@mui/material/Typography'
 
 import SendIcon from '@mui/icons-material/Send'
 
-import { useMutation } from '@tanstack/react-query'
+import { Surreal } from 'surrealdb.js'
+import { NewComplaint } from '../helpers/types'
+
+const db = new Surreal('http://localhost:9000/rpc', {
+    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
+    db: import.meta.env.VITE_SURREAL_DATABASE,
+    auth: {
+        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
+        DB: import.meta.env.VITE_SURREAL_DATABASE,
+        SC: 'basic',
+        user: 'basic',
+    },
+})
+
+async function SubmitRage(complaintData: NewComplaint) {
+    const [complaint] = await db.create('complaints', complaintData)
+    return complaint
+}
 
 export default function SendRage() {
     const formRef = React.useRef<HTMLFormElement>(null)
@@ -32,45 +47,29 @@ export default function SendRage() {
     function handleSubmit() {
         const formRefCurrent = formRef.current as HTMLFormElement
         if (formRefCurrent.reportValidity()) {
+            setIsLoading(true)
             const complaintData = {
                 complaint: rageText,
                 submissionTime: new Date(),
                 tags: [],
             }
-            const jsonComplaintData = JSON.stringify(complaintData)
-            submitRage.mutate(jsonComplaintData)
+            const result = SubmitRage(complaintData)
+            result.then(
+                () => {
+                    setIsLoading(false)
+                    setAlertSeverity('success')
+                    setSnackbarIsOpen(true)
+                    setRageText('')
+                },
+                (reason) => {
+                    console.error(reason)
+                    setIsLoading(false)
+                    setAlertSeverity('error')
+                    setSnackbarIsOpen(true)
+                }
+            )
         }
     }
-
-    const submitRage = useMutation(
-        (postBody: string) =>
-            fetch(DATABASE_URL + 'key/complaints', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: postBody,
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
-        {
-            onMutate: () => {
-                setIsLoading(true)
-            },
-            onSuccess: () => {
-                setIsLoading(false)
-                setAlertSeverity('success')
-                setSnackbarIsOpen(true)
-                setRageText('')
-            },
-            onError: () => {
-                setIsLoading(false)
-                setAlertSeverity('error')
-                setSnackbarIsOpen(true)
-            },
-        }
-    )
 
     return (
         <>

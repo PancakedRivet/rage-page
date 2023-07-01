@@ -1,12 +1,19 @@
 import { Suspense, lazy, useMemo, useState } from 'react'
 
-import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
-import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
+import {
+    Tag,
+    ComplaintTableRow,
+    Complaint,
+    NewTag,
+    SurrealGraphQuery,
+} from '../helpers/types'
 
 import { Row } from '@tanstack/react-table'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+import { Surreal } from 'surrealdb.js'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -20,10 +27,17 @@ import RageTable from './RageTable'
 
 const RageGraph = lazy(() => import('./RageGraph'))
 
-// A simple laoding page while the admin page is loaded
-const Loading = () => {
-    return <h2>Loading...</h2>
-}
+const db = new Surreal('http://localhost:9000/rpc', {
+    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
+    db: import.meta.env.VITE_SURREAL_DATABASE,
+    auth: {
+        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
+        DB: import.meta.env.VITE_SURREAL_DATABASE,
+        SC: 'admin',
+        user: 'admin',
+        pass: import.meta.env.VITE_SURREAL_PASS_ADMIN,
+    },
+})
 
 export default function SeeRage() {
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
@@ -59,10 +73,11 @@ export default function SeeRage() {
     }
 
     const handleCreateTag = (newTagName: string) => {
-        const jsonTag = JSON.stringify({
+        const tagData: NewTag = {
             name: newTagName,
-        })
-        createTag.mutate(jsonTag)
+            isPublic: false,
+        }
+        createTag.mutate(tagData)
     }
 
     const handleUpdateTagEdit = (
@@ -87,81 +102,48 @@ export default function SeeRage() {
         graphDataRefetch()
     }
 
-    const { data: tagData } = useQuery(['tags'], () =>
-        fetch(DATABASE_URL + 'key/tags', {
-            method: 'GET',
-            headers: SURREAL_HEADERS,
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                // Sorting the tags based on the name
-                const sortedTags = res[0].result.sort((tag1: Tag, tag2: Tag) =>
-                    tag1.name > tag2.name ? 1 : tag1.name < tag2.name ? -1 : 0
-                )
-                return sortedTags
-            })
+    const { data: tagData }: { data: Tag[] | undefined } = useQuery(
+        ['tags'],
+        async () => {
+            const result = await db.query(
+                'SELECT * FROM tags ORDER BY name ASC'
+            )
+            return result[0].result
+        }
     )
 
-    const { data: complaintData } = useQuery({
-        queryKey: ['complaints'],
-        queryFn: () =>
-            fetch(DATABASE_URL + 'key/complaints', {
-                method: 'GET',
-                headers: SURREAL_HEADERS,
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    // Only save the object that contains the results we want.
-                    // There is only one item in the array
-                    const sortedComplaints = res[0].result.sort(
-                        (complaint1: Complaint, complaint2: Complaint) =>
-                            new Date(complaint1.submissionTime) <
-                            new Date(complaint2.submissionTime)
-                                ? 1
-                                : new Date(complaint1.submissionTime) >
-                                  new Date(complaint2.submissionTime)
-                                ? -1
-                                : 0
-                    )
-                    return sortedComplaints
-                }),
-        enabled: !!tagData,
-    })
+    const { data: complaintData }: { data: Complaint[] | undefined } = useQuery(
+        {
+            queryKey: ['complaints'],
+            queryFn: async () => {
+                const result = await db.query(
+                    'SELECT * FROM complaints ORDER BY submissionTime DESC'
+                )
+                return result[0].result
+            },
+            enabled: !!tagData,
+        }
+    )
 
-    const { data: graphData, refetch: graphDataRefetch } = useQuery({
+    const {
+        data: graphData,
+        refetch: graphDataRefetch,
+    }: { data: SurrealGraphQuery | undefined; refetch: () => void } = useQuery({
         queryKey: ['graphData'],
-        queryFn: () =>
-            fetch(DATABASE_URL + 'sql', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: surrealQueryForGraph,
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('An error ocurred')
-                    }
-                    return res.json()
-                })
-                .then((res) => {
-                    // Only save the object that contains the results we want.
-                    // It's always the last item in the array
-                    const results = res[res.length - 1].result
-                    return results[0]
-                }),
+        queryFn: async () => {
+            const result = await db.query(surrealQueryForGraph)
+            // Only save the object that contains the results we want.
+            // The results are always the last item in the returned array
+            const graphDataResults = result[result.length - 1].result
+            if (Array.isArray(graphDataResults)) {
+                return graphDataResults[0]
+            }
+            return null
+        },
     })
 
     const updateTags = useMutation(
-        (postBody: string) =>
-            fetch(DATABASE_URL + 'sql', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: postBody,
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
+        async (postBody: string) => await db.query(postBody),
         {
             onSuccess: () => {
                 setAlertSeverity('success')
@@ -181,17 +163,7 @@ export default function SeeRage() {
     )
 
     const createTag = useMutation(
-        (postBody: string) =>
-            fetch(DATABASE_URL + 'key/tags', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: postBody,
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
+        async (postBody: NewTag) => await db.create('tags', postBody),
         {
             onSuccess: () => {
                 setAlertSeverity('success')
@@ -240,7 +212,7 @@ export default function SeeRage() {
                     {complaintData && complaintData.length > 0 ? (
                         <>
                             {isShowingGraph ? (
-                                <Suspense fallback={<Loading />}>
+                                <Suspense fallback={<h2>Loading...</h2>}>
                                     <RageGraph
                                         lineData={lineData}
                                         pieData={pieData}

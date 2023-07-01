@@ -40,7 +40,7 @@ export function LoginPage() {
 
     const handleSubmitLogin = () => {
         const submittedPassword = valueRef.current?.value
-        if (submittedPassword === import.meta.env.VITE_ADMIN_PASSWORD) {
+        if (submittedPassword === import.meta.env.VITE_SURREAL_PASS_ADMIN) {
             auth.signin(() => {
                 // Send them back to the page they tried to visit when they were
                 // redirected to the login page. Use { replace: true } so we don't create
