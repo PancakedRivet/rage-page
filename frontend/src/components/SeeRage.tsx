@@ -2,11 +2,13 @@ import { Suspense, lazy, useMemo, useState } from 'react'
 
 import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
-import { Tag, ComplaintTableRow, Complaint } from '../helpers/types'
+import { Tag, ComplaintTableRow, Complaint, NewTag } from '../helpers/types'
 
 import { Row } from '@tanstack/react-table'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+import { Surreal } from 'surrealdb.js'
 
 import Alert, { AlertColor } from '@mui/material/Alert'
 import Box from '@mui/material/Box'
@@ -20,10 +22,17 @@ import RageTable from './RageTable'
 
 const RageGraph = lazy(() => import('./RageGraph'))
 
-// A simple laoding page while the admin page is loaded
-const Loading = () => {
-    return <h2>Loading...</h2>
-}
+const db = new Surreal('http://localhost:9000/rpc', {
+    ns: 'test',
+    db: 'test',
+    auth: {
+        NS: 'test',
+        DB: 'test',
+        SC: 'admin',
+        user: 'admin',
+        pass: import.meta.env.VITE_SURREAL_PASS_ADMIN,
+    },
+})
 
 export default function SeeRage() {
     const [snackbarIsOpen, setSnackbarIsOpen] = useState(false)
@@ -59,10 +68,11 @@ export default function SeeRage() {
     }
 
     const handleCreateTag = (newTagName: string) => {
-        const jsonTag = JSON.stringify({
+        const tagData: NewTag = {
             name: newTagName,
-        })
-        createTag.mutate(jsonTag)
+            isPublic: false,
+        }
+        createTag.mutate(tagData)
     }
 
     const handleUpdateTagEdit = (
@@ -181,17 +191,7 @@ export default function SeeRage() {
     )
 
     const createTag = useMutation(
-        (postBody: string) =>
-            fetch(DATABASE_URL + 'key/tags', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: postBody,
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
+        async (postBody: NewTag) => await db.create('tags', postBody),
         {
             onSuccess: () => {
                 setAlertSeverity('success')
@@ -240,7 +240,7 @@ export default function SeeRage() {
                     {complaintData && complaintData.length > 0 ? (
                         <>
                             {isShowingGraph ? (
-                                <Suspense fallback={<Loading />}>
+                                <Suspense fallback={<h2>Loading...</h2>}>
                                     <RageGraph
                                         lineData={lineData}
                                         pieData={pieData}
