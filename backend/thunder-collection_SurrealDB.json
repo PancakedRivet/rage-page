@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-06-30T22:53:04.945Z",
+    "dateExported": "2023-07-01T00:34:35.907Z",
     "version": "1.1",
     "folders": [
         {
@@ -159,6 +159,45 @@
                 }
             ],
             "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "root",
+                    "password": "root"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "a53bf215-a95b-442d-be71-a1ab967f2c13",
+            "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
+            "containerId": "",
+            "name": "Create Users",
+            "url": "http://127.0.0.1:9000/sql",
+            "method": "POST",
+            "sortNum": 17500,
+            "created": "2023-07-01T00:31:13.942Z",
+            "modified": "2023-07-01T00:34:09.396Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                },
+                {
+                    "name": "NS",
+                    "value": "test"
+                },
+                {
+                    "name": "DB",
+                    "value": "test"
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "text",
+                "raw": "LET $admin_password = \"asdf\";\n\nCREATE users:basic SET user = 'basic';\nCREATE users:admin SET user = 'admin', pass = crypto::argon2::generate($admin_password);",
+                "form": []
+            },
             "auth": {
                 "type": "basic",
                 "basic": {

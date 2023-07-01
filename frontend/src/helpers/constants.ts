@@ -5,9 +5,9 @@ export const SURREAL_HEADERS = {
     Authorization:
         'Basic ' +
         btoa(
-            import.meta.env.VITE_SURREAL_USER +
+            import.meta.env.VITE_SURREAL_USER_ROOT +
                 ':' +
-                import.meta.env.VITE_SURREAL_PASS
+                import.meta.env.VITE_SURREAL_PASS_ROOT
         ),
     NS: 'test',
     DB: 'test',
