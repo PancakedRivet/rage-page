@@ -15,11 +15,11 @@ import { Surreal } from 'surrealdb.js'
 import { NewComplaint } from '../helpers/types'
 
 const db = new Surreal('http://localhost:9000/rpc', {
-    ns: 'test',
-    db: 'test',
+    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
+    db: import.meta.env.VITE_SURREAL_DATABASE,
     auth: {
-        NS: 'test',
-        DB: 'test',
+        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
+        DB: import.meta.env.VITE_SURREAL_DATABASE,
         SC: 'basic',
         user: 'basic',
     },

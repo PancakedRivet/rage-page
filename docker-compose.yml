@@ -21,8 +21,8 @@ services:
         command:
             - start
             - --log=info
-            - --user=${SURREAL_USER}
-            - --pass=${SURREAL_PASS}
+            - --user=${SURREAL_USER_ROOT}
+            - --pass=${SURREAL_PASS_ROOT}
             - file:/data/mydatabase.db
         volumes:
             - type: bind

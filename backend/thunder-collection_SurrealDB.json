@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "SurrealDB",
-    "dateExported": "2023-07-01T00:34:35.907Z",
+    "dateExported": "2023-07-01T04:03:42.576Z",
     "version": "1.1",
     "folders": [
         {
@@ -104,7 +104,7 @@
             "method": "POST",
             "sortNum": 10000,
             "created": "2023-06-18T01:07:14.807Z",
-            "modified": "2023-06-18T01:07:14.807Z",
+            "modified": "2023-07-01T02:57:29.925Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -122,7 +122,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "UPDATE complaints:0o14dl9jaj26qu95p4t9\nSET tags = [\n    tags:nqjuqymico3236bwweb1\n];\n#SET submissionTime = \"2023-06-13T01:20:46.267Z\";",
+                "raw": "UPDATE complaints:3wc5lus13fhi48w97flp\nSET tags = [\n    --tags:1gv1sk9d79wsjrsiqzie,\n    --tags:k6m47a4hiskngctxqafv\n\"1234\"\n];\n#SET submissionTime = \"2023-06-13T01:20:46.267Z\";",
                 "form": []
             },
             "auth": {
@@ -177,7 +177,7 @@
             "method": "POST",
             "sortNum": 17500,
             "created": "2023-07-01T00:31:13.942Z",
-            "modified": "2023-07-01T00:34:09.396Z",
+            "modified": "2023-07-01T04:03:34.739Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -195,7 +195,7 @@
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "LET $admin_password = \"asdf\";\n\nCREATE users:basic SET user = 'basic';\nCREATE users:admin SET user = 'admin', pass = crypto::argon2::generate($admin_password);",
+                "raw": "LET $admin_password = \"REPLACE_ME\";\n\nCREATE users:basic SET user = 'basic';\nCREATE users:admin SET user = 'admin', pass = crypto::argon2::generate($admin_password);",
                 "form": []
             },
             "auth": {
@@ -339,7 +339,7 @@
             "method": "GET",
             "sortNum": 20000,
             "created": "2023-06-30T21:55:47.234Z",
-            "modified": "2023-06-30T21:56:01.235Z",
+            "modified": "2023-07-01T04:03:01.314Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -369,11 +369,11 @@
             "colId": "ca0c6639-2669-4196-8e90-a932ab84f50e",
             "containerId": "",
             "name": "Import SQL",
-            "url": "http://127.0.0.1:9000/export",
+            "url": "http://127.0.0.1:9000/import",
             "method": "POST",
             "sortNum": 22500,
             "created": "2023-06-30T21:57:04.554Z",
-            "modified": "2023-06-30T21:57:58.916Z",
+            "modified": "2023-07-01T04:03:18.258Z",
             "headers": [
                 {
                     "name": "Accept",
@@ -385,13 +385,13 @@
                 },
                 {
                     "name": "DB",
-                    "value": "test"
+                    "value": "test2"
                 }
             ],
             "params": [],
             "body": {
                 "type": "text",
-                "raw": "-- ------------------------------\n-- OPTION\n-- ------------------------------\n\nOPTION IMPORT;\n\n-- ------------------------------\n-- LOGINS\n-- ------------------------------\n\nDEFINE LOGIN user1 ON DATABASE PASSHASH '$argon2id$v=19$m=19456,t=2,p=1$GPTt6sojtjquQpAC3FH+pA$v0DUPfh8sOxF4lVH4eWcRKSQjQcnTKtEWSwkaCsLup0';\n\n-- ------------------------------\n-- SCOPES\n-- ------------------------------\n\nDEFINE SCOPE scope1 SESSION 0ns SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));\nDEFINE SCOPE scope2 SESSION 12h SIGNUP (CREATE user SET email = $email, pass = crypto::argon2::generate($pass)) SIGNIN (SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass));\n\n-- ------------------------------\n-- TABLE: complaints\n-- ------------------------------\n\nDEFINE TABLE complaints SCHEMALESS PERMISSIONS NONE;\n\n-- ------------------------------\n-- TABLE: tags\n-- ------------------------------\n\nDEFINE TABLE tags SCHEMALESS PERMISSIONS NONE;\n\n-- ------------------------------\n-- TABLE: user\n-- ------------------------------\n\nDEFINE TABLE user SCHEMAFULL PERMISSIONS FOR select, update WHERE id = $auth.id, FOR create, delete NONE;\n\nDEFINE FIELD email ON user TYPE string;\nDEFINE FIELD pass ON user TYPE string;\nDEFINE FIELD user ON user TYPE string;\n\nDEFINE INDEX idx_user ON user FIELDS email UNIQUE;\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nBEGIN TRANSACTION;\n\n-- ------------------------------\n-- TABLE DATA: complaints\n-- ------------------------------\n\nUPDATE complaints:0o14dl9jaj26qu95p4t9 CONTENT { complaint: 'Everything to some extent.', id: complaints:0o14dl9jaj26qu95p4t9, submissionTime: '2023-06-13T01:20:46.267Z', tags: [tags:nqjuqymico3236bwweb1, tags:9hnf78w5apnmkyfen4sc] };\nUPDATE complaints:14msshpm6zci5v5evyfm CONTENT { complaint: 'Cloud Ops', id: complaints:14msshpm6zci5v5evyfm, submissionTime: '2023-06-09T22:00:19.170Z', tags: [tags:hqbolbfi47x3fxzi28cj, tags:qy716ex9gn6ui7jz90l4] };\nUPDATE complaints:6qeyyofkk1rcsme9701a CONTENT { complaint: 'Grr Anger\nwith a new line', id: complaints:6qeyyofkk1rcsme9701a, submissionTime: '2023-06-17T04:36:04.178Z', tags: [tags:g1a3n906xolw5y10bo7c, tags:qy716ex9gn6ui7jz90l4, tags:nqjuqymico3236bwweb1, tags:qn1dfvgwd8lcs679m0ai] };\nUPDATE complaints:8blw5bkj7s5kzpnv8zuq CONTENT { complaint: 'Not enough time!', id: complaints:8blw5bkj7s5kzpnv8zuq, submissionTime: '2023-06-17T02:01:18.552Z', tags: [tags:79p9vd3to4ts2gzdeule, tags:hqbolbfi47x3fxzi28cj, tags:g1a3n906xolw5y10bo7c] };\nUPDATE complaints:bqyqq4fsgmndrtm6i6ye CONTENT { complaint: 'This is a really long rant because I want to see how the word wrapping works when something this size is put into the table.', id: complaints:bqyqq4fsgmndrtm6i6ye, submissionTime: '2023-06-09T23:28:29.782Z', tags: [tags:s9fprrl11rghtc0e07jy] };\nUPDATE complaints:fcbxmyhc18zbrotuzrm8 CONTENT { complaint: 'asdf', id: complaints:fcbxmyhc18zbrotuzrm8, submissionTime: '2023-06-09T22:10:22.672Z', tags: [tags:s9fprrl11rghtc0e07jy, tags:qy716ex9gn6ui7jz90l4] };\nUPDATE complaints:ihqgl947eq3pgoeqdn1i CONTENT { complaint: 'Hopefully this works', id: complaints:ihqgl947eq3pgoeqdn1i, submissionTime: '2023-06-09T22:10:32.588Z', tags: [tags:qn1dfvgwd8lcs679m0ai, tags:9hnf78w5apnmkyfen4sc] };\nUPDATE complaints:lghirn8rcp69uorp63jz CONTENT { complaint: 'New thing is annoying', id: complaints:lghirn8rcp69uorp63jz, submissionTime: '2023-06-13T10:01:46.032Z', tags: [tags:79p9vd3to4ts2gzdeule, tags:hqbolbfi47x3fxzi28cj, tags:qy716ex9gn6ui7jz90l4, tags:e9gqtrquv7o182wflzvp] };\nUPDATE complaints:n03ldj4p524ud8xfhek8 CONTENT { complaint: 'Something bad again', id: complaints:n03ldj4p524ud8xfhek8, submissionTime: '2023-06-09T12:00:00Z', tag: [tags:nqjuqymico3236bwweb1], tags: [tags:e9gqtrquv7o182wflzvp, tags:qn1dfvgwd8lcs679m0ai] };\nUPDATE complaints:v7sl5x9stsxu46z9bn29 CONTENT { complaint: 'Performance processes', id: complaints:v7sl5x9stsxu46z9bn29, submissionTime: '2023-06-09T22:01:28.790Z', tags: [tags:g1a3n906xolw5y10bo7c] };\nUPDATE complaints:vfqe697mm4p1tgrp72mh CONTENT { complaint: 'Everything', id: complaints:vfqe697mm4p1tgrp72mh, submissionTime: '2023-06-09T22:08:04.104Z', tags: [tags:hqbolbfi47x3fxzi28cj, tags:nqjuqymico3236bwweb1, tags:qy716ex9gn6ui7jz90l4] };\nUPDATE complaints:vqzbrkc46ycwdkmqot9m CONTENT { complaint: 'Something new', id: complaints:vqzbrkc46ycwdkmqot9m, submissionTime: '2023-06-17T02:02:48.536Z', tags: [] };\n\n-- ------------------------------\n-- TABLE DATA: tags\n-- ------------------------------\n\nUPDATE tags:79p9vd3to4ts2gzdeule CONTENT { id: tags:79p9vd3to4ts2gzdeule, name: 'Another Tag' };\nUPDATE tags:9hnf78w5apnmkyfen4sc CONTENT { id: tags:9hnf78w5apnmkyfen4sc, name: 'Test Tag 4' };\nUPDATE tags:e9gqtrquv7o182wflzvp CONTENT { id: tags:e9gqtrquv7o182wflzvp, name: 'Test Tag 3' };\nUPDATE tags:g1a3n906xolw5y10bo7c CONTENT { id: tags:g1a3n906xolw5y10bo7c, name: 'New Tag' };\nUPDATE tags:hqbolbfi47x3fxzi28cj CONTENT { id: tags:hqbolbfi47x3fxzi28cj, name: 'Cloud Ops' };\nUPDATE tags:nqjuqymico3236bwweb1 CONTENT { id: tags:nqjuqymico3236bwweb1, name: 'Test Tag' };\nUPDATE tags:qn1dfvgwd8lcs679m0ai CONTENT { id: tags:qn1dfvgwd8lcs679m0ai, name: 'Test Tag 2' };\nUPDATE tags:qy716ex9gn6ui7jz90l4 CONTENT { id: tags:qy716ex9gn6ui7jz90l4, name: 'Performance' };\nUPDATE tags:s9fprrl11rghtc0e07jy CONTENT { id: tags:s9fprrl11rghtc0e07jy, name: 'Test Tag 5' };\n\n-- ------------------------------\n-- TABLE DATA: user\n-- ------------------------------\n\nUPDATE user:6skp8rbz2pmziutg7ux0 CONTENT { email: 'test@surrealdb.com', id: user:6skp8rbz2pmziutg7ux0, pass: '$argon2id$v=19$m=19456,t=2,p=1$cXhEpTQ13nZwljI/kAFPbQ$Qhwv+FYinqqTULjqEzE1YYi4epnMKzzq3UoZ6leXVIM' };\nUPDATE user:r79m6gf9ipzbtx52sfpl CONTENT { email: 'info@surrealdb.com', id: user:r79m6gf9ipzbtx52sfpl, pass: '$argon2id$v=19$m=19456,t=2,p=1$iYLkrmPr7DCpN4Jp35MzGA$odfOazQHZgdrMjhptU2LHN/CUXdIsj42HBT/2EoFKo4' };\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nCOMMIT TRANSACTION;",
+                "raw": "-- ------------------------------\n-- OPTION\n-- ------------------------------\n\nOPTION IMPORT;\n\n-- ------------------------------\n-- SCOPES\n-- ------------------------------\n\nDEFINE SCOPE admin SESSION 12h SIGNIN (SELECT * FROM users WHERE user = 'admin' AND crypto::argon2::compare(pass, $pass));\nDEFINE SCOPE basic SESSION 1d SIGNIN (SELECT * FROM users WHERE user = 'basic');\n\n-- ------------------------------\n-- TABLE: complaints\n-- ------------------------------\n\nDEFINE TABLE complaints SCHEMAFULL PERMISSIONS FOR select, update, delete WHERE $auth.user = 'admin', FOR create FULL;\n\nDEFINE FIELD complaint ON complaints TYPE string ASSERT $value != NONE;\nDEFINE FIELD submissionTime ON complaints TYPE datetime ASSERT $value != NONE;\nDEFINE FIELD tags ON complaints FLEXIBLE TYPE array;\n\n-- ------------------------------\n-- TABLE: tags\n-- ------------------------------\n\nDEFINE TABLE tags SCHEMAFULL PERMISSIONS FOR select, create, update, delete WHERE $auth.user = 'admin';\n\nDEFINE FIELD ispublic ON tags TYPE bool;\nDEFINE FIELD name ON tags TYPE string ASSERT $value != NONE;\n\nDEFINE INDEX idx_tag ON tags FIELDS name UNIQUE;\n\n-- ------------------------------\n-- TABLE: users\n-- ------------------------------\n\nDEFINE TABLE users SCHEMAFULL PERMISSIONS FOR select, update WHERE id = $auth.id, FOR create, delete NONE;\n\nDEFINE FIELD pass ON users TYPE string;\nDEFINE FIELD user ON users TYPE string;\n\nDEFINE INDEX idx_user ON users FIELDS user UNIQUE;\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nBEGIN TRANSACTION;\n\n-- ------------------------------\n-- TABLE DATA: complaints\n-- ------------------------------\n\nUPDATE complaints:3wc5lus13fhi48w97flp CONTENT { complaint: 'life in general', id: complaints:3wc5lus13fhi48w97flp, submissionTime: '2023-06-30T23:39:58.933Z', tags: [tags:1gv1sk9d79wsjrsiqzie, tags:k6m47a4hiskngctxqafv] };\nUPDATE complaints:6psuyk55vjxarrkah5ky CONTENT { complaint: 'Slow processing time', id: complaints:6psuyk55vjxarrkah5ky, submissionTime: '2023-06-30T23:29:13.960Z', tags: [tags:ln9vr2xv2bjx35ufi9fl] };\nUPDATE complaints:meab49f9o9j4n82vj03l CONTENT { complaint: 'Does this work?', id: complaints:meab49f9o9j4n82vj03l, submissionTime: '2023-06-30T23:28:40.078Z', tags: [] };\nUPDATE complaints:vmn8is7mziqgld8legc6 CONTENT { complaint: 'Windows Containers', id: complaints:vmn8is7mziqgld8legc6, submissionTime: '2023-06-30T23:29:05.260Z', tags: [tags:k6m47a4hiskngctxqafv, tags:q8qrrh58sdbmmf67ubml] };\n\n-- ------------------------------\n-- TABLE DATA: tags\n-- ------------------------------\n\nUPDATE tags:1gv1sk9d79wsjrsiqzie CONTENT { id: tags:1gv1sk9d79wsjrsiqzie, name: 'New Tag' };\nUPDATE tags:ffukg91l1geu730o5kwx CONTENT { id: tags:ffukg91l1geu730o5kwx, name: 'Test Tag 1' };\nUPDATE tags:k6m47a4hiskngctxqafv CONTENT { id: tags:k6m47a4hiskngctxqafv, name: 'New Tag 2' };\nUPDATE tags:legl6xik0tml12c0160v CONTENT { id: tags:legl6xik0tml12c0160v, name: 'New Tag 3' };\nUPDATE tags:ln9vr2xv2bjx35ufi9fl CONTENT { id: tags:ln9vr2xv2bjx35ufi9fl, name: 'Test 1' };\nUPDATE tags:q8qrrh58sdbmmf67ubml CONTENT { id: tags:q8qrrh58sdbmmf67ubml, name: 'Performance' };\n\n-- ------------------------------\n-- TABLE DATA: users\n-- ------------------------------\n\nUPDATE users:admin CONTENT { id: users:admin, pass: crypto::argon2::generate('REPLACE_ME'), user: 'admin' };\nUPDATE users:basic CONTENT { id: users:basic, user: 'basic' };\n\n-- ------------------------------\n-- TRANSACTION\n-- ------------------------------\n\nCOMMIT TRANSACTION;",
                 "form": []
             },
             "auth": {

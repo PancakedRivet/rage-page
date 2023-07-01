@@ -59,7 +59,7 @@ BEGIN TRANSACTION;
 -- ------------------------------
 -- TABLE DATA: users
 -- ------------------------------
-UPDATE users:admin CONTENT { id: users:admin, pass: '$argon2id$v=19$m=19456,t=2,p=1$zgNWbWEUP0FIT77q98VmxA$e8uKkucjCKqUKktcAG0WANru+ies5bletOJx16eKnwE', user: 'admin' };
+UPDATE users:admin CONTENT { id: users:admin, pass: crypto::argon2::generate('REPLACE_ME'), user: 'admin' };
 UPDATE users:basic CONTENT { id: users:basic, user: 'basic' };
 -- ------------------------------
 -- TRANSACTION

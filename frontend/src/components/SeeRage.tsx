@@ -28,11 +28,11 @@ import RageTable from './RageTable'
 const RageGraph = lazy(() => import('./RageGraph'))
 
 const db = new Surreal('http://localhost:9000/rpc', {
-    ns: 'test',
-    db: 'test',
+    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
+    db: import.meta.env.VITE_SURREAL_DATABASE,
     auth: {
-        NS: 'test',
-        DB: 'test',
+        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
+        DB: import.meta.env.VITE_SURREAL_DATABASE,
         SC: 'admin',
         user: 'admin',
         pass: import.meta.env.VITE_SURREAL_PASS_ADMIN,
