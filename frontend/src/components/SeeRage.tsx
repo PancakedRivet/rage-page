@@ -1,8 +1,13 @@
 import { Suspense, lazy, useMemo, useState } from 'react'
 
-import { DATABASE_URL, SURREAL_HEADERS } from '../helpers/constants'
 import { convertSurrealQueryToNivoLine } from '../helpers/functions'
-import { Tag, ComplaintTableRow, Complaint, NewTag } from '../helpers/types'
+import {
+    Tag,
+    ComplaintTableRow,
+    Complaint,
+    NewTag,
+    SurrealGraphQuery,
+} from '../helpers/types'
 
 import { Row } from '@tanstack/react-table'
 
@@ -120,40 +125,25 @@ export default function SeeRage() {
         }
     )
 
-    const { data: graphData, refetch: graphDataRefetch } = useQuery({
+    const {
+        data: graphData,
+        refetch: graphDataRefetch,
+    }: { data: SurrealGraphQuery | undefined; refetch: () => void } = useQuery({
         queryKey: ['graphData'],
-        queryFn: () =>
-            fetch(DATABASE_URL + 'sql', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: surrealQueryForGraph,
-            })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error('An error ocurred')
-                    }
-                    return res.json()
-                })
-                .then((res) => {
-                    // Only save the object that contains the results we want.
-                    // It's always the last item in the array
-                    const results = res[res.length - 1].result
-                    return results[0]
-                }),
+        queryFn: async () => {
+            const result = await db.query(surrealQueryForGraph)
+            // Only save the object that contains the results we want.
+            // The results are always the last item in the returned array
+            const graphDataResults = result[result.length - 1].result
+            if (Array.isArray(graphDataResults)) {
+                return graphDataResults[0]
+            }
+            return null
+        },
     })
 
     const updateTags = useMutation(
-        (postBody: string) =>
-            fetch(DATABASE_URL + 'sql', {
-                method: 'POST',
-                headers: SURREAL_HEADERS,
-                body: postBody,
-            }).then((res) => {
-                if (!res.ok) {
-                    throw new Error('An error ocurred')
-                }
-                return res
-            }),
+        async (postBody: string) => await db.query(postBody),
         {
             onSuccess: () => {
                 setAlertSeverity('success')
