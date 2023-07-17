@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 
 import { useAuth } from '../components/contexts/AuthContext'
+import { ENV_VARS } from '../helpers/constants'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -40,7 +41,7 @@ export function LoginPage() {
 
     const handleSubmitLogin = () => {
         const submittedPassword = valueRef.current?.value
-        if (submittedPassword === import.meta.env.VITE_ADMIN_PASSWORD) {
+        if (submittedPassword === ENV_VARS.ADMIN_PASS) {
             auth.signin(() => {
                 // Send them back to the page they tried to visit when they were
                 // redirected to the login page. Use { replace: true } so we don't create

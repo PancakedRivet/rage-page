@@ -13,13 +13,14 @@ import SendIcon from '@mui/icons-material/Send'
 
 import { Surreal } from 'surrealdb.js'
 import { NewComplaint } from '../helpers/types'
+import { ENV_VARS } from '../helpers/constants'
 
-const db = new Surreal('http://localhost:9000/rpc', {
-    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
-    db: import.meta.env.VITE_SURREAL_DATABASE,
+const db = new Surreal(ENV_VARS.SURREAL_URL + '/rpc', {
+    ns: ENV_VARS.SURREAL_NAMESPACE,
+    db: ENV_VARS.SURREAL_DATABASE,
     auth: {
-        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
-        DB: import.meta.env.VITE_SURREAL_DATABASE,
+        NS: ENV_VARS.SURREAL_NAMESPACE,
+        DB: ENV_VARS.SURREAL_DATABASE,
         SC: 'basic',
         user: 'basic',
     },

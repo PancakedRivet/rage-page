@@ -8,6 +8,7 @@ import {
     NewTag,
     SurrealGraphQuery,
 } from '../helpers/types'
+import { ENV_VARS } from '../helpers/constants'
 
 import { Row } from '@tanstack/react-table'
 
@@ -27,15 +28,15 @@ import RageTable from './RageTable'
 
 const RageGraph = lazy(() => import('./RageGraph'))
 
-const db = new Surreal('http://localhost:9000/rpc', {
-    ns: import.meta.env.VITE_SURREAL_NAMESPACE,
-    db: import.meta.env.VITE_SURREAL_DATABASE,
+const db = new Surreal(ENV_VARS.SURREAL_URL + '/rpc', {
+    ns: ENV_VARS.SURREAL_NAMESPACE,
+    db: ENV_VARS.SURREAL_DATABASE,
     auth: {
-        NS: import.meta.env.VITE_SURREAL_NAMESPACE,
-        DB: import.meta.env.VITE_SURREAL_DATABASE,
+        NS: ENV_VARS.SURREAL_NAMESPACE,
+        DB: ENV_VARS.SURREAL_DATABASE,
         SC: 'admin',
         user: 'admin',
-        pass: import.meta.env.VITE_ADMIN_PASSWORD,
+        pass: ENV_VARS.ADMIN_PASS,
     },
 })
 
