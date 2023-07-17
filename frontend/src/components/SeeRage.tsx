@@ -35,7 +35,7 @@ const db = new Surreal('http://localhost:9000/rpc', {
         DB: import.meta.env.VITE_SURREAL_DATABASE,
         SC: 'admin',
         user: 'admin',
-        pass: import.meta.env.VITE_SURREAL_PASS_ADMIN,
+        pass: import.meta.env.VITE_ADMIN_PASSWORD,
     },
 })
 
