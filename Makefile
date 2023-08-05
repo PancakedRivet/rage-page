@@ -8,7 +8,7 @@ NODE_INSTALL="npm i"
 SERVER_RUN="npm run dev"
 
 
-.PHONY: build install dev up start first stop restart clear
+.PHONY: build install dev up start first stop restart clear surreal prod
 
 
 build:
@@ -46,3 +46,12 @@ restart: stop start dev
 
 clear: stop $(ROOT_DIR)/docker-compose.yml
 	$(DOCKER_COMPOSE) down -v --remove-orphans || true
+
+
+surreal: 
+	$(DOCKER_COMPOSE) up -d --no-deps --build surrealdb
+
+
+prod:
+	cd ./frontend && \
+	docker build -f Dockerfile.prod -t rage-page-prod .

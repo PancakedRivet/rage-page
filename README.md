@@ -84,7 +84,13 @@ docker build -f Dockerfile.prod -t rage-page-prod .
 
 (Where 'rage-page-prod' is a tag that can be replaced with any suitable tag for your usecase).
 
-Note that there are no environment variables that are passed in for runtime, this is because Vite does not allow for environment variables to be apssed in at runtime. The environment variables are statically replaced at compile time.
+Alternatively, create the container using the Makefile:
+
+```make
+make prod
+```
+
+Note that there are no environment variables that are passed in for runtime, this is because Vite does not allow for environment variables to be apssed in at runtime. The environment variables are statically replaced at compile time. This means the image will need to be rebuilt if any of the environment variables are changed (like the base URL for SurrealDB).
 
 #### Backend
 
