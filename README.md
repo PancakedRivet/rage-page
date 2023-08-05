@@ -69,6 +69,29 @@ Make any changes required in the files, hot-reloading works on both windows and 
 
 When finished, shutdown the containers with `make stop`
 
+### Production
+
+#### Frontend
+
+The `/frontend/Dockerfile.prod` file details information on how to build this for production. It uses a node-alpine image to build and then an nginx image to serve.
+
+The build the frontend for production, run this command:
+
+```shell
+cd ./frontend
+docker build -f Dockerfile.prod -t rage-page-prod .
+```
+
+(Where 'rage-page-prod' is a tag that can be replaced with any suitable tag for your usecase).
+
+Note that there are no environment variables that are passed in for runtime, this is because Vite does not allow for environment variables to be apssed in at runtime. The environment variables are statically replaced at compile time.
+
+#### Backend
+
+The back-end is using the official SurrealDB container, so this should be deployed according to the official docuemtnation.
+
+See [here for more information](https://hub.docker.com/r/surrealdb/surrealdb) from the official Docker Hub page.
+
 ## Contributing
 
 Currently this is a hobby project. Any feedback / contributions welcome.
